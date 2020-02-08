@@ -43,7 +43,7 @@ void box(int g, int s, int gl, int sl)
 		gotoxy(g, ++s);
 		printf("¦¢");
 		for (x = 1; x <= gl; x++)
-			printf(" ")v
+			printf(" ");
 			printf("¦¢ ");
 	}
 	gotoxy(g, ++s);

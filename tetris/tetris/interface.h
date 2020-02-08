@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <windows.h>
 
 #define B 0	//배경색  /검정(0), 어두운 파랑(16), 어두운 초록(32), 어두운 하늘(48), 어두운 빨강(64), 어두운 보라(80), 어두운 노랑(96), 회색(112), 어두운 회색(128), 파랑(144), 초록(160), 하늘(176), 빨강(192), 보라 (208), 노랑(224), 하양(240) 
@@ -8,7 +9,7 @@
 #define A 10		//강조글자색
 
 enum {
-    UP = 72, DOWN = 80, RIGHT = 77, LEFT = 75, ENTER = 13
+    UP = 72, DOWN = 80, RIGHT = 77, LEFT = 75, ENTER = 13, EXIT = 101
 };
 
 void gotoxy(int x, int y);			// 커서 이동 함수 (가로, 세로) 
