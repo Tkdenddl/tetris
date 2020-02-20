@@ -3,6 +3,8 @@
 #include <conio.h>
 
 typedef struct {
+	COORD center;		// 중심조각의 좌표
+	COORD block[3];		// 나머지 조각의 좌표
 	int t_color;		// 테트로미노 색
 } Tetromino;
 
@@ -13,4 +15,5 @@ typedef struct {
 
 
 void game();
-void init_tetromino(Tetromino** tetp);
+void init_tetromino(Tetromino* tetp);
+void print_tetromino(Tetromino* tetp);

@@ -32,6 +32,8 @@ void game()
 		key = getch();
 		switch (key) {
 		case UP:
+			tetromino[0].center.X = 5, tetromino[0].center.Y = 5;
+			print_tetromino(&tetromino[0]);
 			break;
 		case DOWN:
 			break;
