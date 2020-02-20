@@ -2,6 +2,9 @@
 #include "interface.h"
 #include <conio.h>
 
+#define SWAP(type, x, y) do{ type t = x; x = y; y = t;} while(0)
+
+
 typedef struct {
 	COORD center;		// 중심조각의 좌표
 	COORD block[3];		// 나머지 조각의 좌표
@@ -17,3 +20,6 @@ typedef struct {
 void game();
 void init_tetromino(Tetromino* tetp);
 void print_tetromino(Tetromino* tetp);
+void rotate_tetromino(Tetromino* tetp);
+void erase_tetromino(Tetromino* tetp);
+int down_tetromino(Tetris grid[][11], Tetromino* tetp);
