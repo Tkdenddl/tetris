@@ -20,8 +20,10 @@ void game()
 
 	for (i = 1; i <= 20; i++)		// 테트리스 판 관리 배열 초기화
 	{
-		for (j = 1; j <= 10; j++)
+		for (j = 1; j <= 10; j++) {
 			grid[i][j].situation = 0;
+			grid[i][j].t_color = 15;
+		}
 		grid[i][0].situation = 1;		// 테트리스 옆면 설정
 		grid[i][11].situation = 1;
 	}
@@ -72,7 +74,7 @@ void game()
 		switch (key) {
 		case UP:
 			erase_tetromino(&tetromino[block_num]);
-			rotate_tetromino(&tetromino[block_num]);
+			rotate_tetromino(grid, &tetromino[block_num]);
 			print_tetromino(&tetromino[block_num]);
 			break;
 		case DOWN:

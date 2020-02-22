@@ -14,6 +14,7 @@ typedef struct {
 
 typedef struct {
 	char situation;			// 테트리스 판 해당 좌표의 상황 0: 빔, 1: 참
+	int t_color;			// 테트리스 판 해당 좌표의 색
 } Tetris;
 
 
@@ -21,7 +22,7 @@ typedef struct {
 void game();
 void init_tetromino(Tetromino* tetp);
 void print_tetromino(Tetromino* tetp);
-void rotate_tetromino(Tetromino* tetp);
+void rotate_tetromino(Tetris grid[][12], Tetromino* tetp);
 void erase_tetromino(Tetromino* tetp);
 int down_tetromino(Tetris grid[][12], Tetromino* tetp);
 int right_tetromino(Tetris grid[][12], Tetromino* tetp);

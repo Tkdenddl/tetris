@@ -3,13 +3,13 @@
 void init_tetromino(Tetromino* tetp)
 {
 	// 테트로미노 색
-	tetp[0].t_color = 0;
-	tetp[1].t_color = 0;
-	tetp[2].t_color = 0;
-	tetp[3].t_color = 0;
-	tetp[4].t_color = 0;
-	tetp[5].t_color = 0;
-	tetp[6].t_color = 0;
+	tetp[0].t_color = 14;
+	tetp[1].t_color = 11;
+	tetp[2].t_color = 12;
+	tetp[3].t_color = 10;
+	tetp[4].t_color = 6;
+	tetp[5].t_color = 9;
+	tetp[6].t_color = 13;
 
 	// 테트리미노마다 센터블록에 대한 나머지 블록의 상대적좌표
 	tetp[0].block[0].X = 1, tetp[0].block[0].Y = 0;
@@ -46,6 +46,7 @@ void init_tetromino(Tetromino* tetp)
 void print_tetromino(Tetromino* tetp)
 {
 	gotoxy(tetp->center.X * 2, tetp->center.Y);
+	color(tetp->t_color, B);
 	printf("▩");
 
 	for (int i = 0; i < 3; i++)
@@ -53,17 +54,28 @@ void print_tetromino(Tetromino* tetp)
 		gotoxy((tetp->block[i].X + tetp->center.X) * 2, tetp->block[i].Y + tetp->center.Y);
 		printf("▩");
 	}
-
+	color(C, B);
 	return;
 }
 
-void rotate_tetromino(Tetromino* tetp)
+void rotate_tetromino(Tetris grid[][12], Tetromino* tetp)
 {
-	for (int i = 0; i < 3; i++)
+	short x, y;
+	int i;
+	int count = 0;
+
+	for (i = 0; i < 3; i++)
 	{
-		tetp->block[i].Y *= -1;
-		SWAP(short, tetp->block[i].X, tetp->block[i].Y);
+		x = tetp->center.X - tetp->block[i].Y;
+		y = tetp->center.Y + tetp->block[i].X;
+		if (grid[y][x].situation == 1)
+			count++;
 	}
+	if (count == 0) 
+		for (i = 0; i < 3; i++) {
+			tetp->block[i].Y *= -1;
+			SWAP(short, tetp->block[i].X, tetp->block[i].Y);
+		}
 }
 
 void erase_tetromino(Tetromino* tetp)
@@ -126,6 +138,10 @@ void set_grid(Tetris grid[][12], Tetromino* tetp)		// 테트로미노가 다 내려가 고�
 	grid[tetp->center.Y + tetp->block[0].Y][tetp->center.X + tetp->block[0].X].situation = 1;
 	grid[tetp->center.Y + tetp->block[1].Y][tetp->center.X + tetp->block[1].X].situation = 1;
 	grid[tetp->center.Y + tetp->block[2].Y][tetp->center.X + tetp->block[2].X].situation = 1;
+	grid[tetp->center.Y][tetp->center.X].t_color = tetp->t_color;
+	grid[tetp->center.Y + tetp->block[0].Y][tetp->center.X + tetp->block[0].X].t_color = tetp->t_color;
+	grid[tetp->center.Y + tetp->block[1].Y][tetp->center.X + tetp->block[1].X].t_color = tetp->t_color;
+	grid[tetp->center.Y + tetp->block[2].Y][tetp->center.X + tetp->block[2].X].t_color = tetp->t_color;
 
 	return;
 }
@@ -163,8 +179,11 @@ void draw_grid(Tetris grid[][12])		// 고정된 테트로미노들 그리기
 		for (j = 1; j <= 10; j++)
 		{
 			gotoxy(j * 2, i);
-			if (grid[i][j].situation)
+			if (grid[i][j].situation) {
+				color(grid[i][j].t_color, B);
 				printf("▩");
+				color(C, B);
+			}
 			else
 				printf("  ");
 
