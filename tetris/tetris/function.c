@@ -78,16 +78,13 @@ void erase_tetromino(Tetromino* tetp)
 	}
 }
 
-int down_tetromino(Tetris grid[][11], Tetromino* tetp)
+int down_tetromino(Tetris grid[][12], Tetromino* tetp)
 {
 	if (grid[tetp->center.Y + 1][tetp->center.X].situation == 0
 		&& grid[tetp->center.Y + tetp->block[0].Y + 1][tetp->center.X + tetp->block[0].X].situation == 0
 		&& grid[tetp->center.Y + tetp->block[1].Y + 1][tetp->center.X + tetp->block[1].X].situation == 0
 		&& grid[tetp->center.Y + tetp->block[2].Y + 1][tetp->center.X + tetp->block[2].X].situation == 0
-		&& tetp->center.Y + 1 <= 20
-		&& tetp->center.Y + tetp->block[0].Y + 1 <= 20
-		&& tetp->center.Y + tetp->block[1].Y + 1 <= 20
-		&& tetp->center.Y + tetp->block[2].Y + 1 <= 20) {
+		) {
 		tetp->center.Y++;
 		return 1;		// 내리기 성공
 	}
@@ -95,16 +92,13 @@ int down_tetromino(Tetris grid[][11], Tetromino* tetp)
 		return 0;		// 내리기 실패
 }
 
-int right_tetromino(Tetris grid[][11], Tetromino* tetp)
+int right_tetromino(Tetris grid[][12], Tetromino* tetp)
 {
 	if (grid[tetp->center.Y][tetp->center.X + 1].situation == 0
 		&& grid[tetp->center.Y + tetp->block[0].Y][tetp->center.X + tetp->block[0].X + 1].situation == 0
 		&& grid[tetp->center.Y + tetp->block[1].Y][tetp->center.X + tetp->block[1].X + 1].situation == 0
 		&& grid[tetp->center.Y + tetp->block[2].Y][tetp->center.X + tetp->block[2].X + 1].situation == 0
-		&& tetp->center.X + 1 <= 10
-		&& tetp->center.X + tetp->block[0].X + 1 <= 10
-		&& tetp->center.X + tetp->block[1].X + 1 <= 10
-		&& tetp->center.X + tetp->block[2].X + 1 <= 10) {
+		) {
 		tetp->center.X++;
 		return 1;		// 오른쪽 이동 성공
 	}
@@ -112,19 +106,69 @@ int right_tetromino(Tetris grid[][11], Tetromino* tetp)
 		return 0;		// 오른쪽 이동 실패
 }
 
-int left_tetromino(Tetris grid[][11], Tetromino* tetp)
+int left_tetromino(Tetris grid[][12], Tetromino* tetp)
 {
 	if (grid[tetp->center.Y][tetp->center.X - 1].situation == 0
 		&& grid[tetp->center.Y + tetp->block[0].Y][tetp->center.X + tetp->block[0].X - 1].situation == 0
 		&& grid[tetp->center.Y + tetp->block[1].Y][tetp->center.X + tetp->block[1].X - 1].situation == 0
 		&& grid[tetp->center.Y + tetp->block[2].Y][tetp->center.X + tetp->block[2].X - 1].situation == 0
-		&& tetp->center.X - 1 >= 1
-		&& tetp->center.X + tetp->block[0].X - 1 >= 1
-		&& tetp->center.X + tetp->block[1].X - 1 >= 1
-		&& tetp->center.X + tetp->block[2].X - 1 >= 1) {
+		) {
 		tetp->center.X--;
 		return 1;		// 왼쪽 이동 성공
 	}
 	else
 		return 0;		// 왼쪽 이동 실패
+}
+
+void set_grid(Tetris grid[][12], Tetromino* tetp)		// 테트로미노가 다 내려가 고정되면 격자의 그 부분의 situation을 1로
+{
+	grid[tetp->center.Y][tetp->center.X].situation = 1;
+	grid[tetp->center.Y + tetp->block[0].Y][tetp->center.X + tetp->block[0].X].situation = 1;
+	grid[tetp->center.Y + tetp->block[1].Y][tetp->center.X + tetp->block[1].X].situation = 1;
+	grid[tetp->center.Y + tetp->block[2].Y][tetp->center.X + tetp->block[2].X].situation = 1;
+
+	return;
+}
+
+char check_grid(Tetris grid[][12])		// 격자상태를 체크해서 완성된 줄이 있으면 그 줄을 없애고 내림. 반환값은 없앤 줄의 개수
+{
+	char result = 0;
+	int i, j, k, l;
+	char count = 0;
+
+	for (i = 1; i <= 20; i++)
+	{
+		for (j = 1; j <= 10; j++)
+			if (grid[i][j].situation)		// 채워져있으면
+				count++;
+		if (count == 10)		// 모두 채워져 있으면 
+		{
+			for (k = i; k >= 2; k--)
+				for (l = 1; l <= 10; l++)
+					grid[k][l] = grid[k - 1][l];		// 아래칸의 정보를 위칸으로 바꿈
+			draw_grid(grid);
+			result++;
+		}
+		count = 0;
+	}
+
+	return result;
+}
+
+void draw_grid(Tetris grid[][12])		// 고정된 테트로미노들 그리기
+{
+	int i, j;
+
+	for (i = 1; i <= 20; i++)
+		for (j = 1; j <= 10; j++)
+		{
+			gotoxy(j * 2, i);
+			if (grid[i][j].situation)
+				printf("▩");
+			else
+				printf("  ");
+
+		}
+
+	return;
 }

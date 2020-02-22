@@ -1,9 +1,10 @@
 #pragma once
 #include "interface.h"
 #include <conio.h>
+#include <time.h>
 
 #define SWAP(type, x, y) do{ type t = x; x = y; y = t;} while(0)
-
+#define DELAY 1000		// 테트로미노가 떨어지는 시간(밀리초)
 
 typedef struct {
 	COORD center;		// 중심조각의 좌표
@@ -22,6 +23,9 @@ void init_tetromino(Tetromino* tetp);
 void print_tetromino(Tetromino* tetp);
 void rotate_tetromino(Tetromino* tetp);
 void erase_tetromino(Tetromino* tetp);
-int down_tetromino(Tetris grid[][11], Tetromino* tetp);
-int right_tetromino(Tetris grid[][11], Tetromino* tetp);
-int left_tetromino(Tetris grid[][11], Tetromino* tetp);
+int down_tetromino(Tetris grid[][12], Tetromino* tetp);
+int right_tetromino(Tetris grid[][12], Tetromino* tetp);
+int left_tetromino(Tetris grid[][12], Tetromino* tetp);
+void set_grid(Tetris grid[][12], Tetromino* tetp);
+char check_grid(Tetris grid[][12]);		// 격자상태를 체크해서 완성된 줄이 있으면 그 줄을 없애고 내림. 반환값은 없앤 줄의 개수
+void draw_grid(Tetris grid[][12]);		// 고정된 테트로미노들 그리기
