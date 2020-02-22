@@ -46,8 +46,14 @@ void game()
 			print_tetromino(&tetromino[block_num]);
 			break;
 		case RIGHT:
+			erase_tetromino(&tetromino[block_num]);
+			right_tetromino(grid, &tetromino[block_num]);
+			print_tetromino(&tetromino[block_num]);
 			break;
 		case LEFT:
+			erase_tetromino(&tetromino[block_num]);
+			left_tetromino(grid, &tetromino[block_num]);
+			print_tetromino(&tetromino[block_num]);
 			break;
 		case EXIT:		// e
 			end = 1;

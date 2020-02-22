@@ -23,3 +23,5 @@ void print_tetromino(Tetromino* tetp);
 void rotate_tetromino(Tetromino* tetp);
 void erase_tetromino(Tetromino* tetp);
 int down_tetromino(Tetris grid[][11], Tetromino* tetp);
+int right_tetromino(Tetris grid[][11], Tetromino* tetp);
+int left_tetromino(Tetris grid[][11], Tetromino* tetp);

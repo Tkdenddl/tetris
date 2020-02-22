@@ -94,3 +94,37 @@ int down_tetromino(Tetris grid[][11], Tetromino* tetp)
 	else
 		return 0;		// 내리기 실패
 }
+
+int right_tetromino(Tetris grid[][11], Tetromino* tetp)
+{
+	if (grid[tetp->center.Y][tetp->center.X + 1].situation == 0
+		&& grid[tetp->center.Y + tetp->block[0].Y][tetp->center.X + tetp->block[0].X + 1].situation == 0
+		&& grid[tetp->center.Y + tetp->block[1].Y][tetp->center.X + tetp->block[1].X + 1].situation == 0
+		&& grid[tetp->center.Y + tetp->block[2].Y][tetp->center.X + tetp->block[2].X + 1].situation == 0
+		&& tetp->center.X + 1 <= 10
+		&& tetp->center.X + tetp->block[0].X + 1 <= 10
+		&& tetp->center.X + tetp->block[1].X + 1 <= 10
+		&& tetp->center.X + tetp->block[2].X + 1 <= 10) {
+		tetp->center.X++;
+		return 1;		// 오른쪽 이동 성공
+	}
+	else
+		return 0;		// 오른쪽 이동 실패
+}
+
+int left_tetromino(Tetris grid[][11], Tetromino* tetp)
+{
+	if (grid[tetp->center.Y][tetp->center.X - 1].situation == 0
+		&& grid[tetp->center.Y + tetp->block[0].Y][tetp->center.X + tetp->block[0].X - 1].situation == 0
+		&& grid[tetp->center.Y + tetp->block[1].Y][tetp->center.X + tetp->block[1].X - 1].situation == 0
+		&& grid[tetp->center.Y + tetp->block[2].Y][tetp->center.X + tetp->block[2].X - 1].situation == 0
+		&& tetp->center.X - 1 >= 1
+		&& tetp->center.X + tetp->block[0].X - 1 >= 1
+		&& tetp->center.X + tetp->block[1].X - 1 >= 1
+		&& tetp->center.X + tetp->block[2].X - 1 >= 1) {
+		tetp->center.X--;
+		return 1;		// 왼쪽 이동 성공
+	}
+	else
+		return 0;		// 왼쪽 이동 실패
+}
