@@ -23,7 +23,7 @@ void game()
 	box(0, 0, 21, 20);		// 테트리스 게임 판 그리기(일단 대충 이걸로..) 각 칸의 좌표는 (x * 2, y)
 	box(23, 0, 14, 1);
 	printf("점수 : %6d", score);
-	box(23, 3, 14, 4);
+	box(23, 3, 14, 5);
 	tetromino[NEXT] = tetromino[next_block];
 	tetromino[NEXT].center.X = 15;
 	tetromino[NEXT].center.Y = 6;
