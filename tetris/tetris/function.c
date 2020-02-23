@@ -16,9 +16,9 @@ void init_tetromino(Tetromino* tetp)
 	tetp[0].block[1].X = 0, tetp[0].block[1].Y = -1;
 	tetp[0].block[2].X = 1, tetp[0].block[2].Y = -1;
 
-	tetp[1].block[0].X = 0, tetp[1].block[0].Y = 2;
-	tetp[1].block[1].X = 0, tetp[1].block[1].Y = 1;
-	tetp[1].block[2].X = 0, tetp[1].block[2].Y = -1;
+	tetp[1].block[0].X = 0, tetp[1].block[0].Y = 1;
+	tetp[1].block[1].X = 0, tetp[1].block[1].Y = -1;
+	tetp[1].block[2].X = 0, tetp[1].block[2].Y = 2;
 
 	tetp[2].block[0].X = -1, tetp[2].block[0].Y = 0;
 	tetp[2].block[1].X = 0, tetp[2].block[1].Y = -1;

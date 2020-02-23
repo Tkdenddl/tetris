@@ -4,7 +4,6 @@
 #include <time.h>
 
 #define SWAP(type, x, y) do{ type t = x; x = y; y = t;} while(0)
-#define DELAY 1000		// 테트로미노가 떨어지는 시간(밀리초)
 
 typedef struct {
 	COORD center;		// 중심조각의 좌표

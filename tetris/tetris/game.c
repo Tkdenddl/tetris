@@ -10,11 +10,15 @@ void game()
 	Tetris grid[22][12];		// 테트리스 판 관리 배열
 	clock_t start, end;
 	char timer = 0;		// 타이머 on:1 off:0
+	short delay = 1000;		// 테트로미노가 떨어지는 간격: 밀리초
+	int score = 0;		// 점수: 1줄 -> 줄당 100, 2줄 -> 줄당 300, 3줄 -> 줄당 500, 4줄 -> 줄당 1000
 
 	srand((unsigned)time(NULL));	// 난수 시드값 초기화
 
 	system("cls");		// 화면 지우기
 	box(0, 0, 21, 20);		// 테트리스 게임 판 그리기(일단 대충 이걸로..) 각 칸의 좌표는 (x * 2, y)
+	box(23, 0, 14, 1);
+	printf("점수 : %6d", score);
 
 	init_tetromino(tetromino);		// 테트로미노 정보 만들기
 
@@ -31,24 +35,50 @@ void game()
 		grid[i][j].situation = 1;
 
 	tetromino[block_num].center.X = 5;
-	tetromino[block_num].center.Y = 3;
+	tetromino[block_num].center.Y = 2;
 
 	while (run) {
 		while (!kbhit()) {		// 키보드 입력 감지할 때까지
 			if (timer)
 			{
-				if (end - start >= DELAY)
+				if (end - start >= delay)
 				{
 					erase_tetromino(&tetromino[block_num]);
 					if (down_tetromino(grid, &tetromino[block_num]) == 0)		// 테트로미노가 바닥에 닿았으면
 					{
 						print_tetromino(&tetromino[block_num]);
 						set_grid(grid, &tetromino[block_num]);
-						check_grid(grid);
+						switch (check_grid(grid))
+						{
+						case 1:
+							score += 100;
+							gotoxy(32, 1);
+							printf("%6d", score);
+							break;
+						case 2:
+							score += 600;
+							gotoxy(32, 1);
+							printf("%6d", score);
+							break;
+						case 3:
+							score += 1500;
+							gotoxy(32, 1);
+							printf("%6d", score);
+							break;
+						case 4:
+							score += 4000;
+							gotoxy(32, 1);
+							printf("%6d", score);
+							break;
+						default:
+							break;
+						}
 
 						block_num = rand() % 7;			// 새로운 테트로미노(원래는 먼저 정해놓아야 함, 지금은 임시로)
 						tetromino[block_num].center.X = 5;
-						tetromino[block_num].center.Y = 3;
+						tetromino[block_num].center.Y = 2;
+						if (delay > 100)
+							delay--;
 					}
 					print_tetromino(&tetromino[block_num]);
 					timer = 0;		// 타이머 초기화
@@ -60,15 +90,6 @@ void game()
 				start = clock();
 			}
 			end = clock();
-			//	if(조각이 바닥에 닿으면)
-			//		if(없어질 줄이 있으면)
-			//			없애고 내림
-			//			점수 추가
-			//		깃발 올림
-			//	if(깃발 올려져 있으면)
-			//		새로운 조각 출현
-			//		깃발 내림
-			//	일정 시간마다 조각 내림.....
 		}
 		key = getch();
 		switch (key) {
