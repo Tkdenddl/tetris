@@ -4,6 +4,7 @@
 #include <time.h>
 
 #define SWAP(type, x, y) do{ type t = x; x = y; y = t;} while(0)
+#define NEXT 7		// 다음 나올 테트로미노의 정보를 저장할 보초
 
 typedef struct {
 	COORD center;		// 중심조각의 좌표
