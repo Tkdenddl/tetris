@@ -47,6 +47,7 @@ void game()
 
 	while (run) {
 		while (!kbhit()) {		// 키보드 입력 감지할 때까지
+			Sleep(10);
 			if (timer)
 			{
 				if (end - start >= delay)
