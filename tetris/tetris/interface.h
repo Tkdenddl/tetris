@@ -12,10 +12,10 @@ enum {
     UP = 72, DOWN = 80, RIGHT = 77, LEFT = 75, ENTER = 13, EXIT = 101
 };
 
+
 void gotoxy(int x, int y);			// 커서 이동 함수 (가로, 세로) 
 void console(int g, int s);			// 콘솔 크기 변경 함수(가로, 세로) 
 void color(int a, int b);			// 색 변경 함수 (배경색, 글자색) 
 void CursorView(char show);			// 커서 숨기는 함수 0: 숨기기, 1: 나타내기 
 void box(int g, int s, int gl, int sl);	// x좌표, y좌표, x길이, y길이 
-
 

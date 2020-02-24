@@ -2,9 +2,19 @@
 #include "interface.h"
 #include <conio.h>
 #include <time.h>
+#include <string.h>
 
 #define SWAP(type, x, y) do{ type t = x; x = y; y = t;} while(0)
 #define NEXT 7		// 다음 나올 테트로미노의 정보를 저장할 보초
+
+typedef struct {
+	char name[10];
+	char id[20];
+	char password[20];
+	int easy_record;
+	int normal_record;
+	int hard_record;
+} Information;
 
 typedef struct {
 	COORD center;		// 중심조각의 좌표
@@ -17,8 +27,8 @@ typedef struct {
 	int t_color;			// 테트리스 판 해당 좌표의 색
 } Tetris;
 
-
-
+Information* login();
+void signup();
 void game();
 void init_tetromino(Tetromino* tetp);
 void print_tetromino(Tetromino* tetp);

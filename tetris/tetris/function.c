@@ -1,5 +1,245 @@
 #include "header.h"
 
+typedef enum {
+	NAME, ID, PASSWORD, MAKE, BACK
+} Infomenu;
+Information* login()
+{
+	int end = 0;
+	int key;
+	Infomenu infomenu = ID;
+	Information information;
+	Information data;
+	FILE* p_file;
+	do {
+		p_file = fopen("informations.dat", "rb");
+	} while (p_file == NULL);
+
+	while (end == 0) {
+		system("cls");
+		switch (infomenu) {
+		case ID:
+			box(12, 5, 25, 1);
+			box(12, 10, 25, 1);
+			color(A, B);
+			box(0, 5, 9, 1);
+			printf(" 아이디");
+			color(C, B);
+			box(0, 10, 9, 1);
+			printf("비밀번호");
+			box(0, 15, 9, 1);
+			printf(" 로그인");
+			box(0, 20, 9, 1);
+			printf(" 나가기");
+			break;
+		case PASSWORD:
+			box(12, 5, 25, 1);
+			box(12, 10, 25, 1);
+			box(0, 5, 9, 1);
+			printf(" 아이디");
+			color(A, B);
+			box(0, 10, 9, 1);
+			printf("비밀번호");
+			color(C, B);
+			box(0, 15, 9, 1);
+			printf(" 로그인");
+			box(0, 20, 9, 1);
+			printf(" 나가기");
+			break;
+		case MAKE:
+			box(12, 5, 25, 1);
+			box(12, 10, 25, 1);
+			box(0, 5, 9, 1);
+			printf(" 아이디");
+			box(0, 10, 9, 1);
+			printf("비밀번호");
+			color(A, B);
+			box(0, 15, 9, 1);
+			printf(" 로그인");
+			color(C, B);
+			box(0, 20, 9, 1);
+			printf(" 나가기");
+			break;
+		case BACK:
+			box(12, 5, 25, 1);
+			box(12, 10, 25, 1);
+			box(0, 5, 9, 1);
+			printf(" 아이디");
+			box(0, 10, 9, 1);
+			printf("비밀번호");
+			box(0, 15, 9, 1);
+			printf(" 로그인");
+			color(A, B);
+			box(0, 20, 9, 1);
+			printf(" 나가기");
+			color(C, B);
+			break;
+		}
+		key = getch();
+		switch (key) {
+		case UP:
+			if (infomenu > ID)
+				infomenu--;
+			break;
+		case DOWN:
+			if (infomenu < BACK)
+				infomenu++;
+			break;
+		case ENTER:
+			switch (infomenu) {
+			case ID:
+				gotoxy(14, 6);
+				CursorView(1);
+				scanf("%s", data.id);
+				CursorView(0);
+				break;
+			case PASSWORD:
+				gotoxy(14, 11);
+				CursorView(1);
+				scanf("%s", data.password);
+				CursorView(0);
+				break;
+			case MAKE:
+				fseek(p_file, 0, SEEK_SET);
+				while (feof(p_file) == 0) {
+					fread(&information, sizeof(information), 1, p_file);
+					if (strcmp(data.id, information.id) == 0 && strcmp(data.password, information.password) == 0)
+						return &information;
+				}
+				gotoxy(0, 0);
+				printf("로그인에 실패했습니다.");
+				break;
+			case BACK:
+				end = 1;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	return NULL;
+}
+void signup()
+{
+	FILE* p_file;
+	int i;			// 반복문 제어 변수
+	int key;		// 키보드 입력 값
+	int end = 0;
+	Infomenu infomenu = NAME;
+	Information information;
+	
+	do {
+		p_file = fopen("informations.dat", "ab");
+	} while (p_file == NULL);
+
+	while (end == 0) {
+		system("cls");		// 화면 지우기
+		switch (infomenu) {
+		case NAME:
+			box(12, 5, 25, 1);
+			box(12, 10, 25, 1);
+			box(12, 15, 25, 1);
+			color(A, B);
+			box(0, 5, 9, 1);
+			printf("  이름");
+			color(C, B);
+			box(0, 10, 9, 1);
+			printf(" 아이디");
+			box(0, 15, 9, 1);
+			printf("비밀번호");
+			box(0, 20, 9, 1);
+			printf("계정생성");
+			break;
+		case ID:
+			box(12, 5, 25, 1);
+			box(12, 10, 25, 1);
+			box(12, 15, 25, 1);
+			box(0, 5, 9, 1);
+			printf("  이름");
+			color(A, B);
+			box(0, 10, 9, 1);
+			printf(" 아이디");
+			color(C, B);
+			box(0, 15, 9, 1);
+			printf("비밀번호");
+			box(0, 20, 9, 1);
+			printf("계정생성");
+			break;
+		case PASSWORD:
+			box(12, 5, 25, 1);
+			box(12, 10, 25, 1);
+			box(12, 15, 25, 1);
+			box(0, 5, 9, 1);
+			printf("  이름");
+			box(0, 10, 9, 1);
+			printf(" 아이디");
+			color(A, B);
+			box(0, 15, 9, 1);
+			printf("비밀번호");
+			color(C, B);
+			box(0, 20, 9, 1);
+			printf("계정생성");
+			break;
+		case MAKE:
+			box(12, 5, 25, 1);
+			box(12, 10, 25, 1);
+			box(12, 15, 25, 1);
+			box(0, 5, 9, 1);
+			printf("  이름");
+			box(0, 10, 9, 1);
+			printf(" 아이디");
+			box(0, 15, 9, 1);
+			printf("비밀번호");
+			color(A, B);
+			box(0, 20, 9, 1);
+			printf("계정생성");
+			color(C, B);
+			break;
+		}
+		key = getch();
+		switch (key) {
+		case UP:
+			if (infomenu > NAME)
+				infomenu--;
+			break;
+		case DOWN:
+			if (infomenu < MAKE)
+				infomenu++;
+			break;
+		case ENTER:
+			switch (infomenu) {
+			case NAME:
+				gotoxy(14, 6);
+				CursorView(1);
+				scanf("%s", &information.name);
+				CursorView(0);
+				break;
+			case ID:
+				gotoxy(14, 11);
+				CursorView(1);
+				scanf("%s", &information.id);
+				CursorView(0);
+				break;
+			case PASSWORD:
+				gotoxy(14, 16);
+				CursorView(1);
+				scanf("%s", &information.password);
+				CursorView(0);
+				break;
+			case MAKE:
+				fwrite(&information, sizeof(information), 1, p_file);
+				end = 1;
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	fclose(p_file);
+	return 0;
+}
+
 void init_tetromino(Tetromino* tetp)
 {
 	// 테트로미노 색
