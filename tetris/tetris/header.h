@@ -11,10 +11,13 @@ typedef struct {
 	char name[10];
 	char id[20];
 	char password[20];
-	int easy_record;
-	int normal_record;
-	int hard_record;
 } Information;
+
+typedef struct {
+	char id[20];
+	int time;		// 기록연월일 표시
+	int score;
+} RECORD;
 
 typedef struct {
 	COORD center;		// 중심조각의 좌표
@@ -29,7 +32,7 @@ typedef struct {
 
 Information* login();
 void signup();
-void game();
+int game();					// 점수를 반환하도록 변경함
 void init_tetromino(Tetromino* tetp);
 void print_tetromino(Tetromino* tetp);
 void rotate_tetromino(Tetris grid[][12], Tetromino* tetp);
@@ -40,3 +43,4 @@ int left_tetromino(Tetris grid[][12], Tetromino* tetp);
 void set_grid(Tetris grid[][12], Tetromino* tetp);
 char check_grid(Tetris grid[][12]);		// 격자상태를 체크해서 완성된 줄이 있으면 그 줄을 없애고 내림. 반환값은 없앤 줄의 개수
 void draw_grid(Tetris grid[][12]);		// 고정된 테트로미노들 그리기
+char is_overlap(Tetris grid[][12], Tetromino* tetp);		// 테트로미노가 고정된 자리와 겹쳐있는가 -> 게임이 끝났는지 판정

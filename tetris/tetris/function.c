@@ -3,6 +3,7 @@
 typedef enum {
 	NAME, ID, PASSWORD, MAKE, BACK
 } Infomenu;
+
 Information* login()
 {
 	int end = 0;
@@ -90,13 +91,13 @@ Information* login()
 			case ID:
 				gotoxy(14, 6);
 				CursorView(1);
-				scanf("%s", data.id);
+				scanf("%s", &data.id);
 				CursorView(0);
 				break;
 			case PASSWORD:
 				gotoxy(14, 11);
 				CursorView(1);
-				scanf("%s", data.password);
+				scanf("%s", &data.password);
 				CursorView(0);
 				break;
 			case MAKE:
@@ -104,7 +105,10 @@ Information* login()
 				while (feof(p_file) == 0) {
 					fread(&information, sizeof(information), 1, p_file);
 					if (strcmp(data.id, information.id) == 0 && strcmp(data.password, information.password) == 0)
+					{
+						fclose(p_file);		// 파일 스트림 반납
 						return &information;
+					}
 				}
 				gotoxy(0, 0);
 				printf("로그인에 실패했습니다.");
@@ -117,8 +121,11 @@ Information* login()
 			break;
 		}
 	}
+
+	fclose(p_file);		// 파일 스트림 반납
 	return NULL;
 }
+
 void signup()
 {
 	FILE* p_file;
@@ -236,6 +243,7 @@ void signup()
 			break;
 		}
 	}
+
 	fclose(p_file);
 	return 0;
 }
@@ -399,15 +407,15 @@ char check_grid(Tetris grid[][12])		// 격자상태를 체크해서 완성된 줄이 있으면 그
 				count++;
 		if (count == 10)		// 모두 채워져 있으면 
 		{
-			for (k = i; k >= 2; k--)
+			for (k = i; k >= 1; k--)
 				for (l = 1; l <= 10; l++)
 					grid[k][l] = grid[k - 1][l];		// 아래칸의 정보를 위칸으로 바꿈
-			draw_grid(grid);
 			result++;
 		}
 		count = 0;
 	}
 
+	draw_grid(grid);
 	return result;
 }
 
@@ -430,4 +438,15 @@ void draw_grid(Tetris grid[][12])		// 고정된 테트로미노들 그리기
 		}
 
 	return;
+}
+
+char is_overlap(Tetris grid[][12], Tetromino* tetp)		// 테트로미노가 고정된 자리와 겹쳐있는가 -> 게임이 끝났는지 판정
+{
+	if (grid[tetp->center.Y][tetp->center.X].situation)
+		return 1;
+	for (int i = 0; i < 3; i++)
+		if (grid[tetp->center.Y + tetp->block[i].Y][tetp->center.X + tetp->block[i].X].situation)
+			return 1;
+
+	return 0;
 }

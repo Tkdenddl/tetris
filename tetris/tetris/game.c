@@ -1,6 +1,6 @@
 #include "header.h"
 
-void game()
+int game()
 {
 	int i, j;		// 반복문 제어 변수
 	int key;		// 키보드 입력 값
@@ -41,6 +41,9 @@ void game()
 	}
 	for (j = 1; j <= 10; j++)		// 테트리스 바닥판 설정
 		grid[i][j].situation = 1;
+	for (j = 1; j <= 10; j++)		// 테트리스 윗판 설정
+		grid[0][j].situation = 0;
+
 
 	tetromino[block_num].center.X = 5;
 	tetromino[block_num].center.Y = 2;
@@ -86,7 +89,7 @@ void game()
 						block_num = next_block;			// 새로운 테트로미노(원래는 먼저 정해놓아야 함, 지금은 임시로)
 						tetromino[block_num].center.X = 5;
 						tetromino[block_num].center.Y = 2;
-
+						
 						erase_tetromino(&tetromino[NEXT]);
 						next_block = rand() % 7;
 						tetromino[NEXT] = tetromino[next_block];
@@ -94,6 +97,14 @@ void game()
 						tetromino[NEXT].center.Y = 6;
 						print_tetromino(&tetromino[NEXT]);
 						
+						if (is_overlap(grid, &tetromino[block_num]))			// 게임이 끝나면
+						{
+							print_tetromino(&tetromino[block_num]);
+							run = 0;
+							Sleep(1000);
+							break;
+						}
+
 						if (delay > 100)
 							delay--;
 					}
@@ -139,5 +150,5 @@ void game()
 
 	}
 
-	return;
+	return score;
 }

@@ -11,6 +11,7 @@ int main(void)
 	int key;		// 키보드 입력 값
 	int end = 0;
 	Menu menu = LOGIN;
+	Information *info;		// 사용자 정보
 
 	console(40, 25);		// 콘솔 창 크기 설정
 	CursorView(0);		// 커서 숨기기
@@ -60,8 +61,27 @@ int main(void)
 		case ENTER:
 			switch (menu) {
 			case LOGIN:
-				if(login() != NULL)
-					game();		// 게임 시작
+				if ((info = login()) != NULL)
+				{
+					RECORD record;
+					record.score = game();		// 게임 시작
+					
+					FILE* fp = fopen("records.dat", "a");
+					if (fp == NULL)
+					{
+						fprintf(stderr, "records.dat 파일 열기 실패 /n");
+						break;
+					}
+					
+					record.time = time(NULL);
+					strcpy(record.id, info->id);
+
+					if (fwrite(&record, sizeof(RECORD), 1, fp) == NULL)
+						fprintf(stderr, "records.dat 파일 쓰기 오류 /n");
+
+					fclose(fp);
+				}
+					
 				break;
 			case SIGNUP:
 				signup();
