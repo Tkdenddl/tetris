@@ -9,6 +9,8 @@ int main(void)
 {
 #if RESET
 	FILE* fp;
+	remove("informations.dat");
+	remove("records.dat");
 	fp = fopen("informations.dat", "wb");
 	fclose(fp);
 	fp = fopen("records.dat", "wb");
