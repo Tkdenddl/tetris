@@ -6,6 +6,7 @@
 
 #define SWAP(type, x, y) do{ type t = x; x = y; y = t;} while(0)
 #define NEXT 7		// 다음 나올 테트로미노의 정보를 저장할 보초
+#define RESET 0		// 1이면 모든 기록 초기화
 
 typedef struct {
 	char name[10];
@@ -30,9 +31,13 @@ typedef struct {
 	int t_color;			// 테트리스 판 해당 좌표의 색
 } Tetris;
 
-Information* login();
+typedef enum {
+	EASY = 1, NORMAL = 2, HARD = 4
+} MODE;
+
+Information login();
 void signup();
-int game();					// 점수를 반환하도록 변경함
+int game(MODE mode);					// 점수를 반환하도록 변경함, 모드를 인수로 받도록 함
 void init_tetromino(Tetromino* tetp);
 void print_tetromino(Tetromino* tetp);
 void rotate_tetromino(Tetris grid[][12], Tetromino* tetp);
@@ -44,3 +49,4 @@ void set_grid(Tetris grid[][12], Tetromino* tetp);
 char check_grid(Tetris grid[][12]);		// 격자상태를 체크해서 완성된 줄이 있으면 그 줄을 없애고 내림. 반환값은 없앤 줄의 개수
 void draw_grid(Tetris grid[][12]);		// 고정된 테트로미노들 그리기
 char is_overlap(Tetris grid[][12], Tetromino* tetp);		// 테트로미노가 고정된 자리와 겹쳐있는가 -> 게임이 끝났는지 판정
+int add_record(RECORD *record);							// 기록 추가함수

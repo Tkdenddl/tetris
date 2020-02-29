@@ -7,11 +7,19 @@ typedef enum {
 
 int main(void)
 {
+#if RESET
+	FILE* fp;
+	fp = fopen("informations.dat", "wb");
+	fclose(fp);
+	fp = fopen("records.dat", "wb");
+	fclose(fp);
+#endif
 	int i;			// 반복문 제어 변수
 	int key;		// 키보드 입력 값
 	int end = 0;
 	Menu menu = LOGIN;
-	Information *info;		// 사용자 정보
+	Information info;		// 사용자 정보
+	MODE mode = HARD;		// 게임의 난이도
 
 	console(40, 25);		// 콘솔 창 크기 설정
 	CursorView(0);		// 커서 숨기기
@@ -61,25 +69,34 @@ int main(void)
 		case ENTER:
 			switch (menu) {
 			case LOGIN:
-				if ((info = login()) != NULL)
+				info = login();
+				if (info.id[19] != 'N')
 				{
 					RECORD record;
-					record.score = game();		// 게임 시작
-					
-					FILE* fp = fopen("records.dat", "a");
-					if (fp == NULL)
+					int rank;		// 기록순위
+					record.score = game(mode);		// 게임 시작
+					record.time = time(NULL);
+					strcpy(record.id, info.id);
+
+					rank = add_record(&record);
+					system("cls");
+					box(0, 0, 21, 1);
+					printf("%d \t %d \t %s", rank, record.score, info.id);
+
+					// 기록 출력 -> 나중에 함수화??
+					RECORD temp;
+					FILE* fp = fopen("records.dat", "rb");
+					box(0, 3, 30, 15);
+					printf("기록순위");
+					for (int i = 0; i < 10; i++)
 					{
-						fprintf(stderr, "records.dat 파일 열기 실패 /n");
-						break;
+						if (fread(&temp, sizeof(RECORD), 1, fp) == NULL)
+							break;
+						gotoxy(2, 4 + i);
+						printf("%d: %d \t %s", i + 1, temp.score, temp.id);
 					}
 					
-					record.time = time(NULL);
-					strcpy(record.id, info->id);
-
-					if (fwrite(&record, sizeof(RECORD), 1, fp) == NULL)
-						fprintf(stderr, "records.dat 파일 쓰기 오류 /n");
-
-					fclose(fp);
+					_getch();
 				}
 					
 				break;

@@ -4,12 +4,13 @@ typedef enum {
 	NAME, ID, PASSWORD, MAKE, BACK
 } Infomenu;
 
-Information* login()
+Information login()
 {
 	int end = 0;
 	int key;
 	Infomenu infomenu = ID;
 	Information information;
+	information.id[19] = 'N';		// 반환형이 구조체인 관계로 로그인 실패를 확인하기 위해 넣음....... 다른 방법 요망
 	Information data;
 	FILE* p_file;
 	do {
@@ -91,13 +92,13 @@ Information* login()
 			case ID:
 				gotoxy(14, 6);
 				CursorView(1);
-				scanf("%s", &data.id);
+				scanf("%s", data.id);
 				CursorView(0);
 				break;
 			case PASSWORD:
 				gotoxy(14, 11);
 				CursorView(1);
-				scanf("%s", &data.password);
+				scanf("%s", data.password);
 				CursorView(0);
 				break;
 			case MAKE:
@@ -107,7 +108,7 @@ Information* login()
 					if (strcmp(data.id, information.id) == 0 && strcmp(data.password, information.password) == 0)
 					{
 						fclose(p_file);		// 파일 스트림 반납
-						return &information;
+						return information;
 					}
 				}
 				gotoxy(0, 0);
@@ -123,7 +124,7 @@ Information* login()
 	}
 
 	fclose(p_file);		// 파일 스트림 반납
-	return NULL;
+	return information;
 }
 
 void signup()
@@ -218,19 +219,19 @@ void signup()
 			case NAME:
 				gotoxy(14, 6);
 				CursorView(1);
-				scanf("%s", &information.name);
+				scanf("%s", information.name);
 				CursorView(0);
 				break;
 			case ID:
 				gotoxy(14, 11);
 				CursorView(1);
-				scanf("%s", &information.id);
+				scanf("%s", information.id);
 				CursorView(0);
 				break;
 			case PASSWORD:
 				gotoxy(14, 16);
 				CursorView(1);
-				scanf("%s", &information.password);
+				scanf("%s", information.password);
 				CursorView(0);
 				break;
 			case MAKE:
@@ -449,4 +450,51 @@ char is_overlap(Tetris grid[][12], Tetromino* tetp)		// 테트로미노가 고정된 자리
 			return 1;
 
 	return 0;
+}
+
+int add_record(RECORD *record)							// 기록 추가함수
+{
+	FILE* fp1, * fp2;
+	RECORD buffer;
+	int count = 1;
+	int result;			// 기록의 인덱스(반환값)
+	char flag = 1;
+
+	fp1 = fopen("records.dat", "rb");
+	if (fp1 == NULL)
+	{
+		fprintf(stderr, "records.dat 파일 열기 실패 /n");
+	}
+
+	fp2 = fopen("temp.dat", "wb");
+	if (fp2 == NULL)
+	{
+		fprintf(stderr, "temp.dat 파일 열기 실패 /n");
+	}
+
+	while (fread(&buffer, sizeof(RECORD), 1, fp1))
+	{
+		if (flag && record->score > buffer.score)
+		{
+			fwrite(record, sizeof(RECORD), 1, fp2);
+			result = count;
+			flag = 0;
+		}
+		fwrite(&buffer, sizeof(RECORD), 1, fp2);
+		count++;
+	}
+
+	if (flag)		// 기록이 꼴지라면
+	{
+		fwrite(record, sizeof(RECORD), 1, fp2);
+		result = count;
+	}
+
+	fclose(fp1);
+	fclose(fp2);
+
+	remove("records.dat");
+	rename("temp.dat", "records.dat");
+
+	return result;
 }
