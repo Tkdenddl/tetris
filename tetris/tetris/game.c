@@ -1,6 +1,6 @@
 #include "header.h"
 
-int game()
+int game(MODE mode)
 {
 	int i, j;		// 반복문 제어 변수
 	int key;		// 키보드 입력 값
@@ -106,7 +106,7 @@ int game()
 						}
 
 						if (delay > 100)
-							delay--;
+							delay -= mode;
 					}
 					print_tetromino(&tetromino[block_num]);
 					timer = 0;		// 타이머 초기화
