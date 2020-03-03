@@ -1,6 +1,6 @@
 #include "header.h"
 
-int game(MODE mode)
+int game(Mode mode)
 {
 	int i, j;		// 반복문 제어 변수
 	int key;		// 키보드 입력 값

@@ -1,8 +1,209 @@
 #include "header.h"
 
 typedef enum {
-	NAME, ID, PASSWORD, MAKE, BACK
+	ID, PASSWORD, MAKE, BACK
 } Infomenu;
+
+typedef enum {
+	MYPASSWORD, MODE, START, RECORD, MYEXIT
+} Mymenu;
+
+void mypage(Information* information)
+{
+	int i;
+	char end = 0;
+	int key;
+	Mymenu mymenu = MYPASSWORD;
+	Mode mymode = NORMAL;
+	Record record;
+	int rank;		// 기록순위
+	Record temp;
+	FILE* fp;
+
+
+	while (end == 0) {
+		system("cls");
+		switch (mymenu) {
+		case MYPASSWORD:
+			box(0, 0, 20, 1);
+			printf("ID : %s", information->id);
+			color(A, B);
+			box(0, 4, 9, 1);
+			printf("PASSWORD");
+			color(C, B);
+			box(0, 8, 7, 1);
+			printf(" mode");
+			box(10, 8, 7, 1);
+			printf(" easy");
+			box(19, 8, 7, 1);
+			printf("normal");
+			box(28, 8, 7, 1);
+			printf(" hard");
+			box(0, 12, 6, 1);
+			printf("start");
+			box(0, 16, 7, 1);
+			printf("record");
+			box(0, 20, 5, 1);
+			printf("exit");
+			break;
+		case MODE:
+			box(0, 0, 20, 1);
+			printf("ID : %s", information->id);
+			box(0, 4, 9, 1);
+			printf("PASSWORD");
+			color(A, B);
+			box(0, 8, 7, 1);
+			printf(" mode");
+			color(C, B);
+			box(10, 8, 7, 1);
+			printf(" easy");
+			box(19, 8, 7, 1);
+			printf("normal");
+			box(28, 8, 7, 1);
+			printf(" hard");
+			box(0, 12, 6, 1);
+			printf("start");
+			box(0, 16, 7, 1);
+			printf("record");
+			box(0, 20, 5, 1);
+			printf("exit");
+			break;
+		case START:
+			box(0, 0, 20, 1);
+			printf("ID : %s", information->id);
+			box(0, 4, 9, 1);
+			printf("PASSWORD");
+			box(0, 8, 7, 1);
+			printf(" mode");
+			box(10, 8, 7, 1);
+			printf(" easy");
+			box(19, 8, 7, 1);
+			printf("normal");
+			box(28, 8, 7, 1);
+			printf(" hard");
+			color(A, B);
+			box(0, 12, 6, 1);
+			printf("start");
+			color(C, B);
+			box(0, 16, 7, 1);
+			printf("record");
+			box(0, 20, 5, 1);
+			printf("exit");
+			break;
+		case RECORD:
+			box(0, 0, 20, 1);
+			printf("ID : %s", information->id);
+			box(0, 4, 9, 1);
+			printf("PASSWORD");
+			box(0, 8, 7, 1);
+			printf(" mode");
+			box(10, 8, 7, 1);
+			printf(" easy");
+			box(19, 8, 7, 1);
+			printf("normal");
+			box(28, 8, 7, 1);
+			printf(" hard");
+			box(0, 12, 6, 1);
+			printf("start");
+			color(A, B);
+			box(0, 16, 7, 1);
+			printf("record");
+			color(C, B);
+			box(0, 20, 5, 1);
+			printf("exit");
+			break;
+		case MYEXIT:
+			box(0, 0, 20, 1);
+			printf("ID : %s", information->id);
+			box(0, 4, 9, 1);
+			printf("PASSWORD");
+			box(0, 8, 7, 1);
+			printf(" mode");
+			box(10, 8, 7, 1);
+			printf(" easy");
+			box(19, 8, 7, 1);
+			printf("normal");
+			box(28, 8, 7, 1);
+			printf(" hard");
+			box(0, 12, 6, 1);
+			printf("start");
+			box(0, 16, 7, 1);
+			printf("record");
+			color(A, B);
+			box(0, 20, 5, 1);
+			printf("exit");
+			color(C, B);
+			break;
+		}
+		key = getch();
+		switch (key) {
+		case UP:
+			if (mymenu > MYPASSWORD)
+				mymenu--;
+			break;
+		case DOWN:
+			if (mymenu < MYEXIT)
+				mymenu++;
+			break;
+		case ENTER:
+			switch (mymenu) {
+			case MYPASSWORD:
+				break;
+			case MODE:
+				break;
+			case START:
+				record.score = game(mymode);		// 게임 시작
+				record.time = time(NULL);
+				strcpy(record.id, information->id);
+
+				rank = add_record(&record, mymode);
+				system("cls");
+				box(0, 0, 21, 1);
+				printf("%d \t %d \t %s", rank, record.score, information->id);
+
+				switch (mymode) {
+				case EASY:
+					fp = fopen("easyrecords.dat", "rb");
+					break;
+				case NORMAL:
+					fp = fopen("normalrecords.dat", "rb");
+					break;
+				case HARD:
+					fp = fopen("hardrecords.dat", "rb");
+					break;
+				}
+				box(0, 3, 30, 15);
+				printf("기록순위");
+				fseek(fp, 0, SEEK_SET);
+				for (i = 0; i < 10; i++)
+				{
+					if (fread(&temp, sizeof(Record), 1, fp) == NULL)
+						break;
+					printf("error");
+					getch();
+					gotoxy(2, 4 + i);
+					printf("%d등", i + 1);
+					/*gotoxy(6, 4 + i);
+					printf("%d", temp.score);
+					gotoxy(15, 4 + i);
+					printf("%s", temp.id);*/
+				}
+				fclose(fp);
+				getch();
+				break;
+			case RECORD:
+				break;
+			case MYEXIT:
+				end = 1;
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	return;
+}
 
 Information login()
 {
@@ -10,7 +211,6 @@ Information login()
 	int key;
 	Infomenu infomenu = ID;
 	Information information;
-	information.id[19] = 'N';		// 반환형이 구조체인 관계로 로그인 실패를 확인하기 위해 넣음....... 다른 방법 요망
 	Information data;
 	FILE* p_file;
 	do {
@@ -107,12 +307,12 @@ Information login()
 					fread(&information, sizeof(information), 1, p_file);
 					if (strcmp(data.id, information.id) == 0 && strcmp(data.password, information.password) == 0)
 					{
-						fclose(p_file);		// 파일 스트림 반납
-						return information;
+						//fclose(p_file);		// 파일 스트림 반납
+						information.onoff = 1;
+						end = 1;
+						break;
 					}
 				}
-				gotoxy(0, 0);
-				printf("로그인에 실패했습니다.");
 				break;
 			case BACK:
 				end = 1;
@@ -133,7 +333,7 @@ void signup()
 	int i;			// 반복문 제어 변수
 	int key;		// 키보드 입력 값
 	int end = 0;
-	Infomenu infomenu = NAME;
+	Infomenu infomenu = ID;
 	Information information;
 	
 	do {
@@ -143,27 +343,9 @@ void signup()
 	while (end == 0) {
 		system("cls");		// 화면 지우기
 		switch (infomenu) {
-		case NAME:
-			box(12, 5, 25, 1);
-			box(12, 10, 25, 1);
-			box(12, 15, 25, 1);
-			color(A, B);
-			box(0, 5, 9, 1);
-			printf("  이름");
-			color(C, B);
-			box(0, 10, 9, 1);
-			printf(" 아이디");
-			box(0, 15, 9, 1);
-			printf("비밀번호");
-			box(0, 20, 9, 1);
-			printf("계정생성");
-			break;
 		case ID:
-			box(12, 5, 25, 1);
 			box(12, 10, 25, 1);
 			box(12, 15, 25, 1);
-			box(0, 5, 9, 1);
-			printf("  이름");
 			color(A, B);
 			box(0, 10, 9, 1);
 			printf(" 아이디");
@@ -174,11 +356,8 @@ void signup()
 			printf("계정생성");
 			break;
 		case PASSWORD:
-			box(12, 5, 25, 1);
 			box(12, 10, 25, 1);
 			box(12, 15, 25, 1);
-			box(0, 5, 9, 1);
-			printf("  이름");
 			box(0, 10, 9, 1);
 			printf(" 아이디");
 			color(A, B);
@@ -189,11 +368,8 @@ void signup()
 			printf("계정생성");
 			break;
 		case MAKE:
-			box(12, 5, 25, 1);
 			box(12, 10, 25, 1);
 			box(12, 15, 25, 1);
-			box(0, 5, 9, 1);
-			printf("  이름");
 			box(0, 10, 9, 1);
 			printf(" 아이디");
 			box(0, 15, 9, 1);
@@ -207,7 +383,7 @@ void signup()
 		key = getch();
 		switch (key) {
 		case UP:
-			if (infomenu > NAME)
+			if (infomenu > ID)
 				infomenu--;
 			break;
 		case DOWN:
@@ -216,12 +392,6 @@ void signup()
 			break;
 		case ENTER:
 			switch (infomenu) {
-			case NAME:
-				gotoxy(14, 6);
-				CursorView(1);
-				scanf("%s", information.name);
-				CursorView(0);
-				break;
 			case ID:
 				gotoxy(14, 11);
 				CursorView(1);
@@ -235,6 +405,7 @@ void signup()
 				CursorView(0);
 				break;
 			case MAKE:
+				information.onoff = 0;
 				fwrite(&information, sizeof(information), 1, p_file);
 				end = 1;
 				break;
@@ -452,41 +623,50 @@ char is_overlap(Tetris grid[][12], Tetromino* tetp)		// 테트로미노가 고정된 자리
 	return 0;
 }
 
-int add_record(RECORD *record)							// 기록 추가함수
+int add_record(Record *record, Mode mode)							// 기록 추가함수
 {
 	FILE* fp1, * fp2;
-	RECORD buffer;
+	Record buffer;
 	int count = 1;
 	int result;			// 기록의 인덱스(반환값)
 	char flag = 1;
 
-	fp1 = fopen("records.dat", "rb");
-	if (fp1 == NULL)
-	{
-		fprintf(stderr, "records.dat 파일 열기 실패 /n");
+	switch (mode) {
+	case EASY:
+		fp1 = fopen("easyrecords.dat", "rb");
+		break;
+	case NORMAL:
+		fp1 = fopen("normalrecords.dat", "rb");
+		break;
+	case HARD:
+		fp1 = fopen("hardrecords.dat", "rb");
+		break;
 	}
+
+	if (fp1 == NULL)
+		fprintf(stderr, "records.dat 파일 열기 실패 /n");
+
 
 	fp2 = fopen("temp.dat", "wb");
 	if (fp2 == NULL)
-	{
 		fprintf(stderr, "temp.dat 파일 열기 실패 /n");
-	}
 
-	while (fread(&buffer, sizeof(RECORD), 1, fp1))
+
+	while (fread(&buffer, sizeof(Record), 1, fp1))
 	{
 		if (flag && record->score > buffer.score)
 		{
-			fwrite(record, sizeof(RECORD), 1, fp2);
+			fwrite(record, sizeof(Record), 1, fp2);
 			result = count;
 			flag = 0;
 		}
-		fwrite(&buffer, sizeof(RECORD), 1, fp2);
+		fwrite(&buffer, sizeof(Record), 1, fp2);
 		count++;
 	}
 
 	if (flag)		// 기록이 꼴지라면
 	{
-		fwrite(record, sizeof(RECORD), 1, fp2);
+		fwrite(record, sizeof(Record), 1, fp2);
 		result = count;
 	}
 
@@ -494,7 +674,17 @@ int add_record(RECORD *record)							// 기록 추가함수
 	fclose(fp2);
 
 	remove("records.dat");
-	rename("temp.dat", "records.dat");
+	switch (mode) {
+	case EASY:
+		rename("temp.dat", "easyrecords.dat");
+		break;
+	case NORMAL:
+		rename("temp.dat", "normalrecords.dat");
+		break;
+	case HARD:
+		rename("temp.dat", "hardrecords.dat");
+		break;
+	}
 
 	return result;
 }

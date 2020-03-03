@@ -10,10 +10,16 @@ int main(void)
 #if RESET
 	FILE* fp;
 	remove("informations.dat");
-	remove("records.dat");
+	remove("easyrecords.dat");
+	remove("normalrecords.dat");
+	remove("hardrecords.dat");
 	fp = fopen("informations.dat", "wb");
 	fclose(fp);
-	fp = fopen("records.dat", "wb");
+	fp = fopen("easyrecords.dat", "wb");
+	fclose(fp);
+	fp = fopen("normalrecords.dat", "wb");
+	fclose(fp);
+	fp = fopen("hardrecords.dat", "wb");
 	fclose(fp);
 #endif
 	int i;			// 반복문 제어 변수
@@ -21,7 +27,6 @@ int main(void)
 	int end = 0;
 	Menu menu = LOGIN;
 	Information info;		// 사용자 정보
-	MODE mode = HARD;		// 게임의 난이도
 
 	console(40, 25);		// 콘솔 창 크기 설정
 	CursorView(0);		// 커서 숨기기
@@ -72,35 +77,8 @@ int main(void)
 			switch (menu) {
 			case LOGIN:
 				info = login();
-				if (info.id[19] != 'N')
-				{
-					RECORD record;
-					int rank;		// 기록순위
-					record.score = game(mode);		// 게임 시작
-					record.time = time(NULL);
-					strcpy(record.id, info.id);
-
-					rank = add_record(&record);
-					system("cls");
-					box(0, 0, 21, 1);
-					printf("%d \t %d \t %s", rank, record.score, info.id);
-
-					// 기록 출력 -> 나중에 함수화??
-					RECORD temp;
-					FILE* fp = fopen("records.dat", "rb");
-					box(0, 3, 30, 15);
-					printf("기록순위");
-					for (int i = 0; i < 10; i++)
-					{
-						if (fread(&temp, sizeof(RECORD), 1, fp) == NULL)
-							break;
-						gotoxy(2, 4 + i);
-						printf("%d: %d \t %s", i + 1, temp.score, temp.id);
-					}
-					
-					_getch();
-				}
-					
+				if (info.onoff == 1)
+					mypage(&info);
 				break;
 			case SIGNUP:
 				signup();
