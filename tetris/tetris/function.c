@@ -12,6 +12,7 @@ void mypage(Information* information)
 {
 	int i;
 	char end = 0;
+	char modeend = 0;
 	int key;
 	Mymenu mymenu = MYPASSWORD;
 	Mode mymode = NORMAL;
@@ -33,12 +34,21 @@ void mypage(Information* information)
 			color(C, B);
 			box(0, 8, 7, 1);
 			printf(" mode");
+			if (mymode == EASY)
+				color(A, B);
 			box(10, 8, 7, 1);
 			printf(" easy");
+			color(C, B);
+			if (mymode == NORMAL)
+				color(A, B);
 			box(19, 8, 7, 1);
 			printf("normal");
+			color(C, B);
+			if (mymode == HARD)
+				color(A, B);
 			box(28, 8, 7, 1);
 			printf(" hard");
+			color(C, B);
 			box(0, 12, 6, 1);
 			printf("start");
 			box(0, 16, 7, 1);
@@ -55,12 +65,21 @@ void mypage(Information* information)
 			box(0, 8, 7, 1);
 			printf(" mode");
 			color(C, B);
+			if (mymode == EASY)
+				color(A, B);
 			box(10, 8, 7, 1);
 			printf(" easy");
+			color(C, B);
+			if (mymode == NORMAL)
+				color(A, B);
 			box(19, 8, 7, 1);
 			printf("normal");
+			color(C, B);
+			if (mymode == HARD)
+				color(A, B);
 			box(28, 8, 7, 1);
 			printf(" hard");
+			color(C, B);
 			box(0, 12, 6, 1);
 			printf("start");
 			box(0, 16, 7, 1);
@@ -75,10 +94,18 @@ void mypage(Information* information)
 			printf("PASSWORD");
 			box(0, 8, 7, 1);
 			printf(" mode");
+			if (mymode == EASY)
+				color(A, B);
 			box(10, 8, 7, 1);
 			printf(" easy");
+			color(C, B);
+			if (mymode == NORMAL)
+				color(A, B);
 			box(19, 8, 7, 1);
 			printf("normal");
+			color(C, B);
+			if (mymode == HARD)
+				color(A, B);
 			box(28, 8, 7, 1);
 			printf(" hard");
 			color(A, B);
@@ -97,12 +124,21 @@ void mypage(Information* information)
 			printf("PASSWORD");
 			box(0, 8, 7, 1);
 			printf(" mode");
+			if (mymode == EASY)
+				color(A, B);
 			box(10, 8, 7, 1);
 			printf(" easy");
+			color(C, B);
+			if (mymode == NORMAL)
+				color(A, B);
 			box(19, 8, 7, 1);
 			printf("normal");
+			color(C, B);
+			if (mymode == HARD)
+				color(A, B);
 			box(28, 8, 7, 1);
 			printf(" hard");
+			color(C, B);
 			box(0, 12, 6, 1);
 			printf("start");
 			color(A, B);
@@ -119,12 +155,21 @@ void mypage(Information* information)
 			printf("PASSWORD");
 			box(0, 8, 7, 1);
 			printf(" mode");
+			if (mymode == EASY)
+				color(A, B);
 			box(10, 8, 7, 1);
 			printf(" easy");
+			color(C, B);
+			if (mymode == NORMAL)
+				color(A, B);
 			box(19, 8, 7, 1);
 			printf("normal");
+			color(C, B);
+			if (mymode == HARD)
+				color(A, B);
 			box(28, 8, 7, 1);
 			printf(" hard");
+			color(C, B);
 			box(0, 12, 6, 1);
 			printf("start");
 			box(0, 16, 7, 1);
@@ -150,6 +195,40 @@ void mypage(Information* information)
 			case MYPASSWORD:
 				break;
 			case MODE:
+				modeend = 0;
+				while (modeend == 0) {
+					if (mymode == EASY)
+						color(A, B);
+					box(10, 8, 7, 1);
+					printf(" easy");
+					color(C, B);
+					if (mymode == NORMAL)
+						color(A, B);
+					box(19, 8, 7, 1);
+					printf("normal");
+					color(C, B);
+					if (mymode == HARD)
+						color(A, B);
+					box(28, 8, 7, 1);
+					printf(" hard");
+					color(C, B);
+					key = getch();
+					switch (key) {
+					case RIGHT:
+						if (mymode < HARD)
+							mymode *= 4;
+						break;
+					case LEFT:
+						if (mymode > EASY)
+							mymode /= 4;
+						break;
+					case ENTER:
+						modeend = 1;
+						break;
+					default:
+						break;
+					}
+				}
 				break;
 			case START:
 				record.score = game(mymode);		// 게임 시작
@@ -179,14 +258,12 @@ void mypage(Information* information)
 				{
 					if (fread(&temp, sizeof(Record), 1, fp) == NULL)
 						break;
-					printf("error");
-					getch();
-					gotoxy(2, 4 + i);
+					gotoxy(2, 5 + i);
 					printf("%d등", i + 1);
-					/*gotoxy(6, 4 + i);
+					gotoxy(6, 5 + i);
 					printf("%d", temp.score);
-					gotoxy(15, 4 + i);
-					printf("%s", temp.id);*/
+					gotoxy(15, 5 + i);
+					printf("%s", temp.id);
 				}
 				fclose(fp);
 				getch();
@@ -210,12 +287,11 @@ Information login()
 	int end = 0;
 	int key;
 	Infomenu infomenu = ID;
-	Information information;
+	Information information = {
+		NULL, NULL, 0 };
 	Information data;
 	FILE* p_file;
-	do {
-		p_file = fopen("informations.dat", "rb");
-	} while (p_file == NULL);
+
 
 	while (end == 0) {
 		system("cls");
@@ -302,12 +378,13 @@ Information login()
 				CursorView(0);
 				break;
 			case MAKE:
+				p_file = fopen("informations.dat", "rb");
 				fseek(p_file, 0, SEEK_SET);
 				while (feof(p_file) == 0) {
 					fread(&information, sizeof(information), 1, p_file);
 					if (strcmp(data.id, information.id) == 0 && strcmp(data.password, information.password) == 0)
 					{
-						//fclose(p_file);		// 파일 스트림 반납
+						fclose(p_file);		// 파일 스트림 반납
 						information.onoff = 1;
 						end = 1;
 						break;
@@ -316,6 +393,7 @@ Information login()
 				break;
 			case BACK:
 				end = 1;
+				break;
 			}
 			break;
 		default:
@@ -323,7 +401,6 @@ Information login()
 		}
 	}
 
-	fclose(p_file);		// 파일 스트림 반납
 	return information;
 }
 
@@ -673,15 +750,17 @@ int add_record(Record *record, Mode mode)							// 기록 추가함수
 	fclose(fp1);
 	fclose(fp2);
 
-	remove("records.dat");
 	switch (mode) {
 	case EASY:
+		remove("easyrecords.dat");
 		rename("temp.dat", "easyrecords.dat");
 		break;
 	case NORMAL:
+		remove("normalrecords.dat");
 		rename("temp.dat", "normalrecords.dat");
 		break;
 	case HARD:
+		remove("hardrecords.dat");
 		rename("temp.dat", "hardrecords.dat");
 		break;
 	}

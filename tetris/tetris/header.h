@@ -32,7 +32,7 @@ typedef struct {
 } Tetris;
 
 typedef enum {
-	EASY = 1, NORMAL = 2, HARD = 4
+	EASY = 4, NORMAL = 16, HARD = 64
 } Mode;
 
 void mypage(Information* information);

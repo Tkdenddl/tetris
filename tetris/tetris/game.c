@@ -105,7 +105,7 @@ int game(Mode mode)
 							break;
 						}
 
-						if (delay > 100)
+						if (delay - mode > 100)
 							delay -= mode;
 					}
 					print_tetromino(&tetromino[block_num]);
