@@ -14,6 +14,7 @@ void mypage(Information* information)
 	char end = 0;
 	char modeend = 0;
 	int key;
+	char tpassword[20];
 	Mymenu mymenu = MYPASSWORD;
 	Mode mymode = NORMAL;
 	Record record;
@@ -193,6 +194,23 @@ void mypage(Information* information)
 		case ENTER:
 			switch (mymenu) {
 			case MYPASSWORD:
+				CursorView(1);
+				box(12, 4, 25, 1);
+				printf("current: ");
+				scanf("%s", tpassword);
+				if (strcmp(tpassword, information->password) == 0) {
+					remove_account(information);
+					box(12, 4, 25, 1);
+					printf("alter : ");
+					scanf("%s", information->password);
+					add_account(information);
+				}
+				else {
+					box(12, 4, 25, 1);
+					printf("wrong!");
+					Sleep(1000);
+				}
+				CursorView(0);
 				break;
 			case MODE:
 				modeend = 0;
@@ -421,39 +439,59 @@ void signup()
 		system("cls");		// 화면 지우기
 		switch (infomenu) {
 		case ID:
+			box(12, 5, 25, 1);
 			box(12, 10, 25, 1);
-			box(12, 15, 25, 1);
 			color(A, B);
-			box(0, 10, 9, 1);
+			box(0, 5, 9, 1);
 			printf(" 아이디");
 			color(C, B);
-			box(0, 15, 9, 1);
+			box(0, 10, 9, 1);
 			printf("비밀번호");
-			box(0, 20, 9, 1);
+			box(0, 15, 9, 1);
 			printf("계정생성");
+			box(0, 20, 9, 1);
+			printf(" 나가기");
 			break;
 		case PASSWORD:
+			box(12, 5, 25, 1);
 			box(12, 10, 25, 1);
-			box(12, 15, 25, 1);
-			box(0, 10, 9, 1);
+			box(0, 5, 9, 1);
 			printf(" 아이디");
 			color(A, B);
-			box(0, 15, 9, 1);
+			box(0, 10, 9, 1);
 			printf("비밀번호");
 			color(C, B);
-			box(0, 20, 9, 1);
+			box(0, 15, 9, 1);
 			printf("계정생성");
+			box(0, 20, 9, 1);
+			printf(" 나가기");
 			break;
 		case MAKE:
+			box(12, 5, 25, 1);
 			box(12, 10, 25, 1);
-			box(12, 15, 25, 1);
-			box(0, 10, 9, 1);
+			box(0, 5, 9, 1);
 			printf(" 아이디");
-			box(0, 15, 9, 1);
+			box(0, 10, 9, 1);
 			printf("비밀번호");
 			color(A, B);
-			box(0, 20, 9, 1);
+			box(0, 15, 9, 1);
 			printf("계정생성");
+			color(C, B);
+			box(0, 20, 9, 1);
+			printf(" 나가기");
+			break;
+		case BACK:
+			box(12, 5, 25, 1);
+			box(12, 10, 25, 1);
+			box(0, 5, 9, 1);
+			printf(" 아이디");
+			box(0, 10, 9, 1);
+			printf("비밀번호");
+			box(0, 15, 9, 1);
+			printf("계정생성");
+			color(A, B);
+			box(0, 20, 9, 1);
+			printf(" 나가기");
 			color(C, B);
 			break;
 		}
@@ -464,26 +502,36 @@ void signup()
 				infomenu--;
 			break;
 		case DOWN:
-			if (infomenu < MAKE)
+			if (infomenu < BACK)
 				infomenu++;
 			break;
 		case ENTER:
 			switch (infomenu) {
 			case ID:
-				gotoxy(14, 11);
+				gotoxy(14, 6);
 				CursorView(1);
 				scanf("%s", information.id);
 				CursorView(0);
 				break;
 			case PASSWORD:
-				gotoxy(14, 16);
+				gotoxy(14, 11);
 				CursorView(1);
 				scanf("%s", information.password);
 				CursorView(0);
 				break;
 			case MAKE:
-				information.onoff = 0;
-				fwrite(&information, sizeof(information), 1, p_file);
+				if (search_id(&information) == 1) {
+					box(12, 15, 25, 1);
+					printf("exiting id!");
+					Sleep(1000);
+				}
+				else {
+					information.onoff = 0;
+					fwrite(&information, sizeof(information), 1, p_file);
+					end = 1;
+				}
+				break;
+			case BACK:
 				end = 1;
 				break;
 			}
@@ -766,4 +814,56 @@ int add_record(Record *record, Mode mode)							// 기록 추가함수
 	}
 
 	return result;
+}
+
+void remove_account(Information* information)
+{
+	FILE* fp1 = fopen("informations.dat", "rb");
+	FILE* fp2 = fopen("temp.dat", "wb");
+	Information buffer;
+
+	fseek(fp1, 0, SEEK_SET);
+	while (!feof(fp1)) {
+		fread(&buffer, sizeof(Information), 1, fp1);
+		if (strcmp(information->id, buffer.id) == 0 && strcmp(information->password, buffer.password) == 0) {
+			continue;
+		}
+		fwrite(&buffer, sizeof(Information), 1, fp2);
+	}
+
+	fclose(fp1);
+	fclose(fp2);
+
+	remove("informations.dat");
+	rename("temp.dat", "informations.dat");
+
+	return;
+}
+
+void add_account(Information* information)
+{
+	FILE* fp = fopen("informations.dat", "ab");
+
+	fwrite(information, sizeof(Information), 1, fp);
+
+	fclose(fp);
+
+	return;
+}
+
+char search_id(Information* information)
+{
+	FILE* fp = fopen("informations.dat", "rb");
+	Information buffer;
+	char search = 0;
+
+	fseek(fp, 0, SEEK_SET);
+	while (!feof(fp)) {
+		fread(&buffer, sizeof(Information), 1, fp);
+		if (strcmp(information->id, buffer.id) == 0) {
+			search = 1;
+			break;
+		}
+	}
+	return search;
 }

@@ -51,3 +51,6 @@ char check_grid(Tetris grid[][12]);		// 격자상태를 체크해서 완성된 줄이 있으면 �
 void draw_grid(Tetris grid[][12]);		// 고정된 테트로미노들 그리기
 char is_overlap(Tetris grid[][12], Tetromino* tetp);		// 테트로미노가 고정된 자리와 겹쳐있는가 -> 게임이 끝났는지 판정
 int add_record(Record *record, Mode mode);							// 기록 추가함수
+void remove_account(Information* information);
+void add_account(Information* information);
+char search_id(Information* information);		// 아이디 찾기 0: 없음 1: 있음.
