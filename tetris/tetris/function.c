@@ -8,6 +8,134 @@ typedef enum {
 	MYPASSWORD, MODE, START, RECORD, MYEXIT
 } Mymenu;
 
+typedef enum {
+	REMOVE, ADEXIT
+} Adminmenu;
+
+void admin_page() 
+{
+	int end = 0;
+	int end2 = 0;
+	char key;
+	int size;
+	int idx = 0;
+	int cursorIdx = 0;
+	int i = 0;
+	Adminmenu adminmenu = REMOVE;
+	FILE* fp1;
+	Information* info_list;
+	box(0, 0, 20, 1);
+	printf("ID : admin");
+	while (!end) {
+		system("cls");
+		switch (adminmenu) {
+		case REMOVE:
+			color(A, B);
+			box(0, 0, 9, 1);
+			printf("REMOVE");
+			color(C, B);
+			box(15, 0, 9, 1);
+			printf("EXIT");
+			break;
+		case ADEXIT:
+			box(0, 0, 9, 1);
+			printf("REMOVE");
+			color(A, B);
+			box(15, 0, 9, 1);
+			printf("EXIT");
+			color(C, B);
+			break;
+		}
+		key = getch();
+		switch (key) {
+		case LEFT:
+			if (adminmenu > REMOVE) adminmenu--;
+			break;
+		case RIGHT:
+			if (adminmenu < ADEXIT) adminmenu++;
+			break;
+		case ENTER:
+			switch (adminmenu) {
+			case REMOVE:
+				fp1 = fopen("informations.dat", "rb");
+				fseek(fp1, 0, SEEK_END);
+				size = ftell(fp1)/sizeof(Information);
+				info_list = (Information*)malloc(size*sizeof(Information));
+				fseek(fp1, 0, SEEK_SET);
+				i = 0;
+				while (1) {
+					fread(&info_list[i++], sizeof(Information), 1, fp1);
+					if (feof(fp1)) break;
+				}
+				fclose(fp1);
+				box(0, 4, 36, 15);
+				printf("%-15s%-15s", "ID", "PASSWORD");
+				idx = 0;
+				cursorIdx = 0;
+				end2 = 0;
+				while (!end2) {
+					box(15, 21, 5, 1);
+					printf("%d/%d", idx + 1, (size - 1) / 13 + 1);
+					for (i = idx * 13; i < idx * 13 + 13; i++) {
+						gotoxy(2, 6 + i%13);
+						if (cursorIdx == i) color(A, B);
+						if (i >= size) printf("%-15s%-15s", "blank", "blank");
+						else if (strlen(info_list[i].id) > 10 || strlen(info_list[i].password) > 10) printf("%-15s%-15s", "too long", "too long");
+						else printf("%-15s%-15s", info_list[i].id, info_list[i].password);
+						color(C, B);
+					}
+					key = getch();
+					switch (key) {
+					case UP:
+						if (cursorIdx > 0) cursorIdx--;
+						if (cursorIdx % 13 == 12 && idx > 0) idx--;
+						break;
+					case DOWN:
+						if (cursorIdx < size-1) cursorIdx++;
+						if (cursorIdx % 13 == 0 && idx < (size - 1) / 13) idx++;
+						break;
+					case LEFT:
+						if (idx > 0) idx--;
+						cursorIdx = idx * 13;
+						break;
+					case RIGHT:
+						if (idx < (size - 1) / 13) idx++;
+						cursorIdx = idx * 13;
+						break;
+					case ENTER:
+						remove_account(&info_list[cursorIdx]);
+						end2 = 1;
+						break;
+					}
+				}
+				free(info_list);
+				break;
+			case ADEXIT:
+				end = 1;
+				break;
+			}
+			break;
+		}
+	}
+}
+
+int my_gets(char buffer[], int limit)
+{
+	char temp;
+	int i;
+	for (i = 0; i < limit; i++) {
+		temp = getchar();
+		if (temp == '\n') {
+			buffer[i] = 0;
+			return i > 0;				// 정상 입력시 1 반환
+		}
+		buffer[i] = temp;
+	}
+	buffer[i] = 0;
+	rewind(stdin);					// 표준입력 버퍼 비우기
+	return 0;						// 글자수 초과 입력시 0 반환
+}
+
 void mypage(Information* information)
 {
 	int i;
@@ -197,12 +325,12 @@ void mypage(Information* information)
 				CursorView(1);
 				box(12, 4, 25, 1);
 				printf("current: ");
-				scanf("%s", tpassword);
+				my_gets(tpassword, LETTER_LIMIT);
 				if (strcmp(tpassword, information->password) == 0) {
 					remove_account(information);
 					box(12, 4, 25, 1);
 					printf("alter : ");
-					scanf("%s", information->password);
+					my_gets(information->password, LETTER_LIMIT);
 					add_account(information);
 				}
 				else {
@@ -386,13 +514,13 @@ Information login()
 			case ID:
 				gotoxy(14, 6);
 				CursorView(1);
-				scanf("%s", data.id);
+				my_gets(data.id, LETTER_LIMIT);
 				CursorView(0);
 				break;
 			case PASSWORD:
 				gotoxy(14, 11);
 				CursorView(1);
-				scanf("%s", data.password);
+				my_gets(data.password, LETTER_LIMIT);
 				CursorView(0);
 				break;
 			case MAKE:
@@ -428,6 +556,8 @@ void signup()
 	int i;			// 반복문 제어 변수
 	int key;		// 키보드 입력 값
 	int end = 0;
+	int wrong_id = 1;
+	int wrong_password = 1;
 	Infomenu infomenu = ID;
 	Information information;
 	
@@ -510,17 +640,34 @@ void signup()
 			case ID:
 				gotoxy(14, 6);
 				CursorView(1);
-				scanf("%s", information.id);
+				if (!my_gets(information.id, 9)) {
+					box(12, 15, 25, 1);
+					printf("between 1 to 9");
+					Sleep(1000);
+					wrong_id = 1;
+				}
+				else wrong_id = 0;
 				CursorView(0);
 				break;
 			case PASSWORD:
 				gotoxy(14, 11);
 				CursorView(1);
-				scanf("%s", information.password);
+				if (!my_gets(information.password, 9)) {
+					box(12, 15, 25, 1);
+					printf("between 1 to 9");
+					Sleep(1000);
+					wrong_password = 1;
+				}
+				else wrong_password = 0;
 				CursorView(0);
 				break;
 			case MAKE:
-				if (search_id(&information) == 1) {
+				if (wrong_password + wrong_id != 0) {
+					box(12, 15, 25, 1);
+					printf("wrong type!");
+					Sleep(1000);
+				}
+				else if (search_id(&information) == 1) {
 					box(12, 15, 25, 1);
 					printf("exiting id!");
 					Sleep(1000);
@@ -818,13 +965,16 @@ int add_record(Record *record, Mode mode)							// 기록 추가함수
 
 void remove_account(Information* information)
 {
-	FILE* fp1 = fopen("informations.dat", "rb");
-	FILE* fp2 = fopen("temp.dat", "wb");
+	if (strcmp(information->id, "admin") == 0) return;
+	FILE* fp1; 
+	FILE* fp2; 
 	Information buffer;
-
+	while (!(fp1 = fopen("informations.dat", "rb")));			// 파일이 안 열릴 때가 있어서 이렇게 해줘야 함
+	while (!(fp2 = fopen("temp.dat", "wb")));
 	fseek(fp1, 0, SEEK_SET);
-	while (!feof(fp1)) {
+	while (1) {
 		fread(&buffer, sizeof(Information), 1, fp1);
+		if (feof(fp1)) break;					// 이상한 거 읽는거 방지
 		if (strcmp(information->id, buffer.id) == 0 && strcmp(information->password, buffer.password) == 0) {
 			continue;
 		}

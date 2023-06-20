@@ -7,6 +7,7 @@
 #define SWAP(type, x, y) do{ type t = x; x = y; y = t;} while(0)
 #define NEXT 7		// 다음 나올 테트로미노의 정보를 저장할 보초
 #define RESET 0	   // 1이면 모든 기록 초기화
+#define LETTER_LIMIT 9		// 입력받는 아이디, 비번 최대 글자수
 
 typedef struct {
 	char id[20];
@@ -35,6 +36,8 @@ typedef enum {
 	EASY = 4, NORMAL = 16, HARD = 64
 } Mode;
 
+int my_gets(char buffer[], int limit);
+void admin_page();
 void mypage(Information* information);
 Information login();
 void signup();

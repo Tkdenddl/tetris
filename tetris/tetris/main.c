@@ -77,8 +77,11 @@ int main(void)
 			switch (menu) {
 			case LOGIN:
 				info = login();
-				if (info.onoff == 1)
-					mypage(&info);
+				if (info.onoff == 1) {
+					if (strcmp(info.id, "admin") == 0)
+						admin_page();
+					else mypage(&info);
+				}
 				break;
 			case SIGNUP:
 				signup();
