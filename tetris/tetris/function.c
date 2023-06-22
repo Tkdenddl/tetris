@@ -57,7 +57,7 @@ void admin_page()
 		case ENTER:
 			switch (adminmenu) {
 			case REMOVE:
-				fp1 = fopen("informations.dat", "rb");
+				while(!(fp1 = fopen("informations.dat", "rb+")));
 				fseek(fp1, 0, SEEK_END);
 				size = ftell(fp1)/sizeof(Information);
 				info_list = (Information*)malloc(size*sizeof(Information));
@@ -84,6 +84,7 @@ void admin_page()
 						else printf("%-15s%-15s", info_list[i].id, info_list[i].password);
 						color(C, B);
 					}
+
 					key = getch();
 					switch (key) {
 					case UP:
@@ -530,12 +531,12 @@ Information login()
 					fread(&information, sizeof(information), 1, p_file);
 					if (strcmp(data.id, information.id) == 0 && strcmp(data.password, information.password) == 0)
 					{
-						fclose(p_file);		// 파일 스트림 반납
 						information.onoff = 1;
 						end = 1;
 						break;
 					}
 				}
+				fclose(p_file);		// 파일 스트림 반납
 				break;
 			case BACK:
 				end = 1;
@@ -562,7 +563,7 @@ void signup()
 	Information information;
 	
 	do {
-		p_file = fopen("informations.dat", "ab");
+		p_file = fopen("informations.dat", "ab+");
 	} while (p_file == NULL);
 
 	while (end == 0) {
@@ -688,7 +689,7 @@ void signup()
 		}
 	}
 
-	fclose(p_file);
+	int t = fclose(p_file);
 	return 0;
 }
 
@@ -969,8 +970,8 @@ void remove_account(Information* information)
 	FILE* fp1; 
 	FILE* fp2; 
 	Information buffer;
-	while (!(fp1 = fopen("informations.dat", "rb")));			// 파일이 안 열릴 때가 있어서 이렇게 해줘야 함
-	while (!(fp2 = fopen("temp.dat", "wb")));
+	while (!(fp1 = fopen("informations.dat", "rb+")));			// 파일이 안 열릴 때가 있어서 이렇게 해줘야 함
+	while (!(fp2 = fopen("temp.dat", "wb+")));
 	fseek(fp1, 0, SEEK_SET);
 	while (1) {
 		fread(&buffer, sizeof(Information), 1, fp1);
@@ -1015,5 +1016,6 @@ char search_id(Information* information)
 			break;
 		}
 	}
+	fclose(fp);
 	return search;
 }
