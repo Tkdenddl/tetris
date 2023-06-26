@@ -452,6 +452,9 @@ void mypage(Information* information)
 				getch();
 				break;
 			case MYEXIT:
+				information->onoff = 0;					// 로그아웃
+				remove_account(information);
+				add_account(information);
 				end = 1;
 				break;
 			}
@@ -469,6 +472,7 @@ Information login()
 {
 	int end = 0;
 	int key;
+	int success = 0;			// 로그인 성공여부
 	Infomenu infomenu = ID;
 	Information information = {
 		NULL, NULL, 0 };
@@ -568,6 +572,7 @@ Information login()
 					{
 						information.onoff = 1;
 						end = 1;
+						success = 1;
 						break;
 					}
 				}
@@ -582,7 +587,7 @@ Information login()
 			break;
 		}
 	}
-
+	if (!success) information.onoff = 0;
 	return information;
 }
 
