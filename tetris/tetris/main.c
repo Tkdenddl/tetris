@@ -25,6 +25,7 @@ int main(void)
 	int i;			// 반복문 제어 변수
 	int key;		// 키보드 입력 값
 	int end = 0;
+	int clean = 0;		// 다른 메뉴를 갔다 왔을 때만 전체 창 지우는 작업 실행
 	Menu menu = LOGIN;
 	Information info;		// 사용자 정보
 
@@ -32,7 +33,10 @@ int main(void)
 	CursorView(0);		// 커서 숨기기
 
 	while (end == 0) {
-		system("cls");		// 화면 지우기
+		if (clean) {
+			system("cls");
+			clean = 0;
+		}
 		switch(menu) {
 		case LOGIN:
 			color(A, B);
@@ -74,6 +78,7 @@ int main(void)
 			if (menu < TERMINATE) menu++;
 			break;
 		case ENTER:
+			clean = 1;
 			switch (menu) {
 			case LOGIN:
 				info = login();

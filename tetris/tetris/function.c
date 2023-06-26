@@ -150,10 +150,13 @@ void mypage(Information* information)
 	int rank;		// 기록순위
 	Record temp;
 	FILE* fp;
-
+	int clean = 1;		// 다른 메뉴에서 넘어갈 때만 화면 지우도록
 
 	while (end == 0) {
-		system("cls");
+		if (clean) {
+			system("cls");
+			clean = 0;
+		}
 		switch (mymenu) {
 		case MYPASSWORD:
 			box(0, 0, 20, 1);
@@ -321,6 +324,7 @@ void mypage(Information* information)
 				mymenu++;
 			break;
 		case ENTER:
+			clean = 1;
 			switch (mymenu) {
 			case MYPASSWORD:
 				CursorView(1);
@@ -416,12 +420,44 @@ void mypage(Information* information)
 				getch();
 				break;
 			case RECORD:
+				system("cls");
+				box(0, 0, 37, 23);
+				printf("기록순위");
+
+				switch (mymode) {
+				case EASY:
+					fp = fopen("easyrecords.dat", "rb");
+					break;
+				case NORMAL:
+					fp = fopen("normalrecords.dat", "rb");
+					break;
+				case HARD:
+					fp = fopen("hardrecords.dat", "rb");
+					break;
+				}
+				
+				fseek(fp, 0, SEEK_SET);
+				for (i = 0; i < 10; i++)
+				{
+					if (fread(&temp, sizeof(Record), 1, fp) == NULL)
+						break;
+					gotoxy(2, 2 + i);
+					printf("%d등", i + 1);
+					gotoxy(6, 2 + i);
+					printf("%d", temp.score);
+					gotoxy(15, 2 + i);
+					printf("%s", temp.id);
+				}
+				fclose(fp);
+				getch();
 				break;
 			case MYEXIT:
 				end = 1;
 				break;
 			}
 			break;
+		case RECORD:
+
 		default:
 			break;
 		}
@@ -439,9 +475,8 @@ Information login()
 	Information data;
 	FILE* p_file;
 
-
+	system("cls");		// 지금 상태에서는 처음에 한번만 지워도 됨. 나중에 문제가 될 수도 있음
 	while (end == 0) {
-		system("cls");
 		switch (infomenu) {
 		case ID:
 			box(12, 5, 25, 1);
@@ -566,8 +601,8 @@ void signup()
 		p_file = fopen("informations.dat", "ab+");
 	} while (p_file == NULL);
 
+	system("cls");		// 지금 상태에서는 처음에 한번만 지워도 됨. 나중에 문제가 될 수도 있음
 	while (end == 0) {
-		system("cls");		// 화면 지우기
 		switch (infomenu) {
 		case ID:
 			box(12, 5, 25, 1);
