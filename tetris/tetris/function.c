@@ -104,6 +104,7 @@ void admin_page()
 						cursorIdx = idx * 13;
 						break;
 					case ENTER:
+						remove_record(info_list[cursorIdx].id);
 						remove_account(&info_list[cursorIdx]);
 						end2 = 1;
 						break;
@@ -426,13 +427,13 @@ void mypage(Information* information)
 
 				switch (mymode) {
 				case EASY:
-					fp = fopen("easyrecords.dat", "rb");
+					fp = fopen("easyrecords.dat", "rb+");
 					break;
 				case NORMAL:
-					fp = fopen("normalrecords.dat", "rb");
+					fp = fopen("normalrecords.dat", "rb+");
 					break;
 				case HARD:
-					fp = fopen("hardrecords.dat", "rb");
+					fp = fopen("hardrecords.dat", "rb+");
 					break;
 				}
 				
@@ -1002,6 +1003,62 @@ int add_record(Record *record, Mode mode)							// 기록 추가함수
 	}
 
 	return result;
+}
+
+void remove_record(const char id[])							// 기록 삭제 함수
+{
+	FILE* fp1, * fp2, * fp3, * fp4;
+	Record buffer;
+
+	fp1 = fopen("easyrecords.dat", "rb+");
+	fp2 = fopen("normalrecords.dat", "rb+");
+	fp3 = fopen("hardrecords.dat", "rb+");
+
+
+	if (fp1 == NULL)
+		fprintf(stderr, "records.dat 파일 열기 실패 /n");
+	fp4 = fopen("temp.dat", "wb");
+	if (fp4 == NULL)
+		fprintf(stderr, "temp.dat 파일 열기 실패 /n");
+
+
+	while (fread(&buffer, sizeof(Record), 1, fp1))
+	{
+		if (strcmp(buffer.id, id) == 0)
+			continue;
+		fwrite(&buffer, sizeof(Record), 1, fp4);
+	}
+	fclose(fp1);
+	fclose(fp4);
+	remove("easyrecords.dat");
+	rename("temp.dat", "easyrecords.dat");
+
+	fp4 = fopen("temp.dat", "wb");
+	while (fread(&buffer, sizeof(Record), 1, fp2))
+	{
+		if (strcmp(buffer.id, id) == 0)
+			continue;
+		fwrite(&buffer, sizeof(Record), 1, fp4);
+	}
+	fclose(fp2);
+	fclose(fp4);
+	remove("normalrecords.dat");
+	rename("temp.dat", "normalrecords.dat");
+
+	fp4 = fopen("temp.dat", "wb");
+	while (fread(&buffer, sizeof(Record), 1, fp3))
+	{
+		if (strcmp(buffer.id, id) == 0)
+			continue;
+		fwrite(&buffer, sizeof(Record), 1, fp4);
+	}
+	fclose(fp3);
+	fclose(fp4);
+	remove("hardrecords.dat");
+	rename("temp.dat", "hardrecords.dat");
+
+
+	return;
 }
 
 void remove_account(Information* information)

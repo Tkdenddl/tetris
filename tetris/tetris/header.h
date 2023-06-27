@@ -6,7 +6,7 @@
 
 #define SWAP(type, x, y) do{ type t = x; x = y; y = t;} while(0)
 #define NEXT 7		// 다음 나올 테트로미노의 정보를 저장할 보초
-#define RESET 0	   // 1이면 모든 기록 초기화
+#define RESET 1	   // 1이면 모든 기록 초기화
 #define LETTER_LIMIT 9		// 입력받는 아이디, 비번 최대 글자수
 
 typedef struct {
@@ -54,6 +54,7 @@ char check_grid(Tetris grid[][12]);		// 격자상태를 체크해서 완성된 줄이 있으면 �
 void draw_grid(Tetris grid[][12]);		// 고정된 테트로미노들 그리기
 char is_overlap(Tetris grid[][12], Tetromino* tetp);		// 테트로미노가 고정된 자리와 겹쳐있는가 -> 게임이 끝났는지 판정
 int add_record(Record *record, Mode mode);							// 기록 추가함수
+void remove_record(const char id[]);									// 기록 삭제함수
 void remove_account(Information* information);
 void add_account(Information* information);
 char search_id(Information* information);		// 아이디 찾기 0: 없음 1: 있음.
