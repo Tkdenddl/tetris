@@ -20,10 +20,10 @@ int game(Mode mode)
 	init_tetromino(tetromino);		// 테트로미노 정보 만들기
 
 	system("cls");		// 화면 지우기
-	box(0, 0, 21, 20);		// 테트리스 게임 판 그리기(일단 대충 이걸로..) 각 칸의 좌표는 (x * 2, y)
-	box(23, 0, 14, 1);
+	box(0, 0, 21, 20, 0, "");		// 테트리스 게임 판 그리기(일단 대충 이걸로..) 각 칸의 좌표는 (x * 2, y)
+	box(23, 0, 14, 1, 0, "");
 	printf("점수 : %6d", score);
-	box(23, 3, 14, 5);
+	box(23, 3, 14, 5, 0, "");
 	tetromino[NEXT] = tetromino[next_block];
 	tetromino[NEXT].center.X = 15;
 	tetromino[NEXT].center.Y = 6;

@@ -24,26 +24,17 @@ void admin_page()
 	Adminmenu adminmenu = REMOVE;
 	FILE* fp1;
 	Information* info_list;
-	box(0, 0, 20, 1);
-	printf("ID : admin");
+	box(0, 0, 20, 1, 0, "ID : admin");
 	while (!end) {
 		system("cls");
 		switch (adminmenu) {
 		case REMOVE:
-			color(A, B);
-			box(0, 0, 9, 1);
-			printf("REMOVE");
-			color(C, B);
-			box(15, 0, 9, 1);
-			printf("EXIT");
+			box(0, 0, 9, 1, 1, "REMOVE");
+			box(15, 0, 9, 1, 0, "EXIT");
 			break;
 		case ADEXIT:
-			box(0, 0, 9, 1);
-			printf("REMOVE");
-			color(A, B);
-			box(15, 0, 9, 1);
-			printf("EXIT");
-			color(C, B);
+			box(0, 0, 9, 1, 0, "REMOVE");
+			box(15, 0, 9, 1, 1, "EXIT");
 			break;
 		}
 		key = getch();
@@ -68,14 +59,13 @@ void admin_page()
 					if (feof(fp1)) break;
 				}
 				fclose(fp1);
-				box(0, 4, 36, 15);
+				box(0, 4, 36, 15, 0, "");
 				printf("%-15s%-15s", "ID", "PASSWORD");
 				idx = 0;
 				cursorIdx = 0;
 				end2 = 0;
 				while (!end2) {
-					box(15, 21, 5, 1);
-					printf("%d/%d", idx + 1, (size - 1) / 13 + 1);
+					box(15, 21, 5, 1, "%d/%d", idx + 1, (size - 1) / 13 + 1, 0);
 					for (i = idx * 13; i < idx * 13 + 13; i++) {
 						gotoxy(2, 6 + i%13);
 						if (cursorIdx == i) color(A, B);
@@ -160,158 +150,64 @@ void mypage(Information* information)
 		}
 		switch (mymenu) {
 		case MYPASSWORD:
-			box(0, 0, 20, 1);
+			box(0, 0, 20, 1, 0, "");
 			printf("ID : %s", information->id);
-			color(A, B);
-			box(0, 4, 9, 1);
-			printf("PASSWORD");
-			color(C, B);
-			box(0, 8, 7, 1);
-			printf(" mode");
-			if (mymode == EASY)
-				color(A, B);
-			box(10, 8, 7, 1);
-			printf(" easy");
-			color(C, B);
-			if (mymode == NORMAL)
-				color(A, B);
-			box(19, 8, 7, 1);
-			printf("normal");
-			color(C, B);
-			if (mymode == HARD)
-				color(A, B);
-			box(28, 8, 7, 1);
-			printf(" hard");
-			color(C, B);
-			box(0, 12, 6, 1);
-			printf("start");
-			box(0, 16, 7, 1);
-			printf("record");
-			box(0, 20, 5, 1);
-			printf("exit");
+			box(0, 4, 9, 1, 1, "PASSWORD");
+			box(0, 8, 7, 1, 0, " mode");
+			box(10, 8, 7, 1, mymode == EASY, " easy");
+			box(19, 8, 7, 1, mymode == NORMAL, "normal");
+			box(28, 8, 7, 1, mymode == HARD, " hard");
+			box(0, 12, 6, 1, 0, "start");
+			box(0, 16, 7, 1, 0, "record");
+			box(0, 20, 5, 1, 0, "exit");
 			break;
 		case MODE:
-			box(0, 0, 20, 1);
+			box(0, 0, 20, 1, 0, "");
 			printf("ID : %s", information->id);
-			box(0, 4, 9, 1);
-			printf("PASSWORD");
-			color(A, B);
-			box(0, 8, 7, 1);
-			printf(" mode");
-			color(C, B);
-			if (mymode == EASY)
-				color(A, B);
-			box(10, 8, 7, 1);
-			printf(" easy");
-			color(C, B);
-			if (mymode == NORMAL)
-				color(A, B);
-			box(19, 8, 7, 1);
-			printf("normal");
-			color(C, B);
-			if (mymode == HARD)
-				color(A, B);
-			box(28, 8, 7, 1);
-			printf(" hard");
-			color(C, B);
-			box(0, 12, 6, 1);
-			printf("start");
-			box(0, 16, 7, 1);
-			printf("record");
-			box(0, 20, 5, 1);
-			printf("exit");
+			box(0, 4, 9, 1, 0, "PASSWORD");
+			box(0, 8, 7, 1, 1, " mode");
+			box(10, 8, 7, 1, mymode == EASY, " easy");
+			box(19, 8, 7, 1, mymode == NORMAL, "normal");
+			box(28, 8, 7, 1, mymode == HARD, " hard");
+			box(0, 12, 6, 1, 0, "start");
+			box(0, 16, 7, 1, 0, "record");
+			box(0, 20, 5, 1, 0, "exit");
 			break;
 		case START:
-			box(0, 0, 20, 1);
+			box(0, 0, 20, 1, 0, "");
 			printf("ID : %s", information->id);
-			box(0, 4, 9, 1);
-			printf("PASSWORD");
-			box(0, 8, 7, 1);
-			printf(" mode");
-			if (mymode == EASY)
-				color(A, B);
-			box(10, 8, 7, 1);
-			printf(" easy");
-			color(C, B);
-			if (mymode == NORMAL)
-				color(A, B);
-			box(19, 8, 7, 1);
-			printf("normal");
-			color(C, B);
-			if (mymode == HARD)
-				color(A, B);
-			box(28, 8, 7, 1);
-			printf(" hard");
-			color(A, B);
-			box(0, 12, 6, 1);
-			printf("start");
-			color(C, B);
-			box(0, 16, 7, 1);
-			printf("record");
-			box(0, 20, 5, 1);
-			printf("exit");
+			box(0, 4, 9, 1, 0, "PASSWORD");
+			box(0, 8, 7, 1, 0, " mode");
+			box(10, 8, 7, 1, mymode == EASY, " easy");
+			box(19, 8, 7, 1, mymode == NORMAL, "normal");
+			box(28, 8, 7, 1, mymode == HARD, " hard");
+			box(0, 12, 6, 1, 1, "start");
+			box(0, 16, 7, 1, 0, "record");
+			box(0, 20, 5, 1, 0, "exit");
 			break;
 		case RECORD:
-			box(0, 0, 20, 1);
+			box(0, 0, 20, 1, 0, "");
 			printf("ID : %s", information->id);
-			box(0, 4, 9, 1);
-			printf("PASSWORD");
-			box(0, 8, 7, 1);
-			printf(" mode");
-			if (mymode == EASY)
-				color(A, B);
-			box(10, 8, 7, 1);
-			printf(" easy");
-			color(C, B);
-			if (mymode == NORMAL)
-				color(A, B);
-			box(19, 8, 7, 1);
-			printf("normal");
-			color(C, B);
-			if (mymode == HARD)
-				color(A, B);
-			box(28, 8, 7, 1);
-			printf(" hard");
-			color(C, B);
-			box(0, 12, 6, 1);
-			printf("start");
-			color(A, B);
-			box(0, 16, 7, 1);
-			printf("record");
-			color(C, B);
-			box(0, 20, 5, 1);
-			printf("exit");
+			box(0, 4, 9, 1, 0, "PASSWORD");
+			box(0, 8, 7, 1, 0, " mode");
+			box(10, 8, 7, 1, mymode == EASY, " easy");
+			box(19, 8, 7, 1, mymode == NORMAL, "normal");
+			box(28, 8, 7, 1, mymode == HARD, " hard");
+			box(0, 12, 6, 1, 0, "start");
+			box(0, 16, 7, 1, 1, "record");
+			box(0, 20, 5, 1, 0, "exit");
 			break;
 		case MYEXIT:
-			box(0, 0, 20, 1);
+			box(0, 0, 20, 1, 0, "");
 			printf("ID : %s", information->id);
-			box(0, 4, 9, 1);
-			printf("PASSWORD");
-			box(0, 8, 7, 1);
-			printf(" mode");
-			if (mymode == EASY)
-				color(A, B);
-			box(10, 8, 7, 1);
-			printf(" easy");
-			color(C, B);
-			if (mymode == NORMAL)
-				color(A, B);
-			box(19, 8, 7, 1);
-			printf("normal");
-			color(C, B);
-			if (mymode == HARD)
-				color(A, B);
-			box(28, 8, 7, 1);
-			printf(" hard");
-			color(C, B);
-			box(0, 12, 6, 1);
-			printf("start");
-			box(0, 16, 7, 1);
-			printf("record");
-			color(A, B);
-			box(0, 20, 5, 1);
-			printf("exit");
-			color(C, B);
+			box(0, 4, 9, 1, 0, "PASSWORD");
+			box(0, 8, 7, 1, 0, " mode");
+			box(10, 8, 7, 1, mymode == EASY, " easy");
+			box(19, 8, 7, 1, mymode == NORMAL, "normal");
+			box(28, 8, 7, 1, mymode == HARD, " hard");
+			box(0, 12, 6, 1, 0, "start");
+			box(0, 16, 7, 1, 0, "record");
+			box(0, 20, 5, 1, 1, "exit");
 			break;
 		}
 		key = getch();
@@ -329,19 +225,16 @@ void mypage(Information* information)
 			switch (mymenu) {
 			case MYPASSWORD:
 				CursorView(1);
-				box(12, 4, 25, 1);
-				printf("current: ");
+				box(12, 4, 25, 1, 0, "current: ");
 				my_gets(tpassword, LETTER_LIMIT);
 				if (strcmp(tpassword, information->password) == 0) {
 					remove_account(information);
-					box(12, 4, 25, 1);
-					printf("alter : ");
+					box(12, 4, 25, 1, 0, "alter : ");
 					my_gets(information->password, LETTER_LIMIT);
 					add_account(information);
 				}
 				else {
-					box(12, 4, 25, 1);
-					printf("wrong!");
+					box(12, 4, 25, 1, 0, "wrong!");
 					Sleep(1000);
 				}
 				CursorView(0);
@@ -349,21 +242,9 @@ void mypage(Information* information)
 			case MODE:
 				modeend = 0;
 				while (modeend == 0) {
-					if (mymode == EASY)
-						color(A, B);
-					box(10, 8, 7, 1);
-					printf(" easy");
-					color(C, B);
-					if (mymode == NORMAL)
-						color(A, B);
-					box(19, 8, 7, 1);
-					printf("normal");
-					color(C, B);
-					if (mymode == HARD)
-						color(A, B);
-					box(28, 8, 7, 1);
-					printf(" hard");
-					color(C, B);
+					box(10, 8, 7, 1, mymode == EASY, " easy");
+					box(19, 8, 7, 1, mymode == NORMAL, "normal");
+					box(28, 8, 7, 1, mymode == HARD, " hard");
 					key = getch();
 					switch (key) {
 					case RIGHT:
@@ -389,8 +270,8 @@ void mypage(Information* information)
 
 				rank = add_record(&record, mymode);
 				system("cls");
-				box(0, 0, 21, 1);
-				printf("%d \t %d \t %s", rank, record.score, information->id);
+				box(0, 0, 21, 1, 0, "");
+				printf("%d등 \t %d점 \t %s", rank, record.score, information->id);
 
 				switch (mymode) {
 				case EASY:
@@ -403,27 +284,21 @@ void mypage(Information* information)
 					fp = fopen("hardrecords.dat", "rb");
 					break;
 				}
-				box(0, 3, 30, 15);
-				printf("기록순위");
+				box(0, 3, 30, 15, 0, "기록순위");
 				fseek(fp, 0, SEEK_SET);
 				for (i = 0; i < 10; i++)
 				{
 					if (fread(&temp, sizeof(Record), 1, fp) == NULL)
 						break;
 					gotoxy(2, 5 + i);
-					printf("%d등", i + 1);
-					gotoxy(6, 5 + i);
-					printf("%d", temp.score);
-					gotoxy(15, 5 + i);
-					printf("%s", temp.id);
+					printf("%d등 \t %d점 \t %s", i + 1, temp.score, temp.id);
 				}
 				fclose(fp);
 				getch();
 				break;
 			case RECORD:
 				system("cls");
-				box(0, 0, 37, 23);
-				printf("기록순위");
+				box(0, 0, 37, 23, 0, "기록순위");
 
 				switch (mymode) {
 				case EASY:
@@ -484,60 +359,36 @@ Information login()
 	while (end == 0) {
 		switch (infomenu) {
 		case ID:
-			box(12, 5, 25, 1);
-			box(12, 10, 25, 1);
-			color(A, B);
-			box(0, 5, 9, 1);
-			printf(" 아이디");
-			color(C, B);
-			box(0, 10, 9, 1);
-			printf("비밀번호");
-			box(0, 15, 9, 1);
-			printf(" 로그인");
-			box(0, 20, 9, 1);
-			printf(" 나가기");
+			box(12, 5, 25, 1, 0, "");
+			box(12, 10, 25, 1, 0, "");
+			box(0, 5, 9, 1, 1, " 아이디");
+			box(0, 10, 9, 1, 0, "비밀번호");
+			box(0, 15, 9, 1, 0, " 로그인");
+			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case PASSWORD:
-			box(12, 5, 25, 1);
-			box(12, 10, 25, 1);
-			box(0, 5, 9, 1);
-			printf(" 아이디");
-			color(A, B);
-			box(0, 10, 9, 1);
-			printf("비밀번호");
-			color(C, B);
-			box(0, 15, 9, 1);
-			printf(" 로그인");
-			box(0, 20, 9, 1);
-			printf(" 나가기");
+			box(12, 5, 25, 1, 0, "");
+			box(12, 10, 25, 1, 0, "");
+			box(0, 5, 9, 1, 0, " 아이디");
+			box(0, 10, 9, 1, 1, "비밀번호");
+			box(0, 15, 9, 1, 0, " 로그인");
+			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case MAKE:
-			box(12, 5, 25, 1);
-			box(12, 10, 25, 1);
-			box(0, 5, 9, 1);
-			printf(" 아이디");
-			box(0, 10, 9, 1);
-			printf("비밀번호");
-			color(A, B);
-			box(0, 15, 9, 1);
-			printf(" 로그인");
-			color(C, B);
-			box(0, 20, 9, 1);
-			printf(" 나가기");
+			box(12, 5, 25, 1, 0, "");
+			box(12, 10, 25, 1, 0, "");
+			box(0, 5, 9, 1, 0, " 아이디");
+			box(0, 10, 9, 1, 0, "비밀번호");
+			box(0, 15, 9, 1, 1, " 로그인");
+			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case BACK:
-			box(12, 5, 25, 1);
-			box(12, 10, 25, 1);
-			box(0, 5, 9, 1);
-			printf(" 아이디");
-			box(0, 10, 9, 1);
-			printf("비밀번호");
-			box(0, 15, 9, 1);
-			printf(" 로그인");
-			color(A, B);
-			box(0, 20, 9, 1);
-			printf(" 나가기");
-			color(C, B);
+			box(12, 5, 25, 1, 0, "");
+			box(12, 10, 25, 1, 0, "");
+			box(0, 5, 9, 1, 0, " 아이디");
+			box(0, 10, 9, 1, 0, "비밀번호");
+			box(0, 15, 9, 1, 0, " 로그인");
+			box(0, 20, 9, 1, 1, " 나가기");
 			break;
 		}
 		key = getch();
@@ -611,60 +462,36 @@ void signup()
 	while (end == 0) {
 		switch (infomenu) {
 		case ID:
-			box(12, 5, 25, 1);
-			box(12, 10, 25, 1);
-			color(A, B);
-			box(0, 5, 9, 1);
-			printf(" 아이디");
-			color(C, B);
-			box(0, 10, 9, 1);
-			printf("비밀번호");
-			box(0, 15, 9, 1);
-			printf("계정생성");
-			box(0, 20, 9, 1);
-			printf(" 나가기");
+			box(12, 5, 25, 1, 0, "");
+			box(12, 10, 25, 1, 0, "");
+			box(0, 5, 9, 1, 1, " 아이디");
+			box(0, 10, 9, 1, 0, "비밀번호");
+			box(0, 15, 9, 1, 0, "계정생성");
+			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case PASSWORD:
-			box(12, 5, 25, 1);
-			box(12, 10, 25, 1);
-			box(0, 5, 9, 1);
-			printf(" 아이디");
-			color(A, B);
-			box(0, 10, 9, 1);
-			printf("비밀번호");
-			color(C, B);
-			box(0, 15, 9, 1);
-			printf("계정생성");
-			box(0, 20, 9, 1);
-			printf(" 나가기");
+			box(12, 5, 25, 1, 0, "");
+			box(12, 10, 25, 1, 0, "");
+			box(0, 5, 9, 1, 0, " 아이디");
+			box(0, 10, 9, 1, 1, "비밀번호");
+			box(0, 15, 9, 1, 0, "계정생성");
+			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case MAKE:
-			box(12, 5, 25, 1);
-			box(12, 10, 25, 1);
-			box(0, 5, 9, 1);
-			printf(" 아이디");
-			box(0, 10, 9, 1);
-			printf("비밀번호");
-			color(A, B);
-			box(0, 15, 9, 1);
-			printf("계정생성");
-			color(C, B);
-			box(0, 20, 9, 1);
-			printf(" 나가기");
+			box(12, 5, 25, 1, 0, "");
+			box(12, 10, 25, 1, 0, "");
+			box(0, 5, 9, 1, 0, " 아이디");
+			box(0, 10, 9, 1, 0, "비밀번호");
+			box(0, 15, 9, 1, 1, "계정생성");
+			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case BACK:
-			box(12, 5, 25, 1);
-			box(12, 10, 25, 1);
-			box(0, 5, 9, 1);
-			printf(" 아이디");
-			box(0, 10, 9, 1);
-			printf("비밀번호");
-			box(0, 15, 9, 1);
-			printf("계정생성");
-			color(A, B);
-			box(0, 20, 9, 1);
-			printf(" 나가기");
-			color(C, B);
+			box(12, 5, 25, 1, 0, "");
+			box(12, 10, 25, 1, 0, "");
+			box(0, 5, 9, 1, 0, " 아이디");
+			box(0, 10, 9, 1, 0, "비밀번호");
+			box(0, 15, 9, 1, 0, "계정생성");
+			box(0, 20, 9, 1, 1, " 나가기");
 			break;
 		}
 		key = getch();
@@ -683,8 +510,7 @@ void signup()
 				gotoxy(14, 6);
 				CursorView(1);
 				if (!my_gets(information.id, 9)) {
-					box(12, 15, 25, 1);
-					printf("between 1 to 9");
+					box(12, 15, 25, 1, 0, "between 1 to 9");
 					Sleep(1000);
 					wrong_id = 1;
 				}
@@ -695,8 +521,7 @@ void signup()
 				gotoxy(14, 11);
 				CursorView(1);
 				if (!my_gets(information.password, 9)) {
-					box(12, 15, 25, 1);
-					printf("between 1 to 9");
+					box(12, 15, 25, 1, 0, "between 1 to 9");
 					Sleep(1000);
 					wrong_password = 1;
 				}
@@ -705,13 +530,11 @@ void signup()
 				break;
 			case MAKE:
 				if (wrong_password + wrong_id != 0) {
-					box(12, 15, 25, 1);
-					printf("wrong type!");
+					box(12, 15, 25, 1, 0, "wrong type!");
 					Sleep(1000);
 				}
 				else if (search_id(&information) == 1) {
-					box(12, 15, 25, 1);
-					printf("exiting id!");
+					box(12, 15, 25, 1, 0, "existing id!");
 					Sleep(1000);
 				}
 				else {

@@ -31,6 +31,9 @@ int main(void)
 
 	console(40, 25);		// 콘솔 창 크기 설정
 	CursorView(0);		// 커서 숨기기
+	DWORD prevMode;
+	GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &prevMode);
+	SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), prevMode & ~ENABLE_QUICK_EDIT_MODE);
 
 	while (end == 0) {
 		if (clean) {
@@ -39,34 +42,19 @@ int main(void)
 		}
 		switch(menu) {
 		case LOGIN:
-			color(A, B);
-			box(13, 5, 9, 1);
-			printf(" 로그인");
-			color(C, B);
-			box(13, 10, 9, 1);
-			printf("회원가입");
-			box(13, 15, 9, 1);
-			printf("게임종료");
+			box(13, 5, 9, 1, 1, " 로그인");
+			box(13, 10, 9, 1, 0, "회원가입");
+			box(13, 15, 9, 1, 0, "게임종료");
 			break;
 		case SIGNUP:
-			box(13, 5, 9, 1);
-			printf(" 로그인");
-			color(A, B);
-			box(13, 10, 9, 1);
-			printf("회원가입");
-			color(C, B);
-			box(13, 15, 9, 1);
-			printf("게임종료");
+			box(13, 5, 9, 1, 0, " 로그인");
+			box(13, 10, 9, 1, 1, "회원가입");
+			box(13, 15, 9, 1, 0, "게임종료");
 			break;
 		case TERMINATE:
-			box(13, 5, 9, 1);
-			printf(" 로그인");
-			box(13, 10, 9, 1);
-			printf("회원가입");
-			color(A, B);
-			box(13, 15, 9, 1);
-			printf("게임종료");
-			color(C, B);
+			box(13, 5, 9, 1, 0, " 로그인");
+			box(13, 10, 9, 1, 0, "회원가입");
+			box(13, 15, 9, 1, 1, "게임종료");
 			break;
 		}
 		key = getch();		// 키보드 입력

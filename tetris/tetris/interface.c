@@ -30,9 +30,11 @@ void CursorView(char show)
 	ConsoleCursor.dwSize = 1;
 	SetConsoleCursorInfo(hConsole, &ConsoleCursor);
 }
-void box(int g, int s, int gl, int sl)
+
+void box(int g, int s, int gl, int sl, int mode, const char* message)
 {
 	int x, y;
+	if (mode) color(A, B);
 	gotoxy(g, s);
 	printf("¦£");
 	for (x = 1; x <= gl; x++)
@@ -52,5 +54,7 @@ void box(int g, int s, int gl, int sl)
 		printf("¦¡");
 	printf("¦¥ ");
 	gotoxy(g + 2, s - sl);
+	printf(message);
+	color(C, B);
 	return;
 }
