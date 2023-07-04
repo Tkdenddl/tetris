@@ -65,7 +65,8 @@ void admin_page()
 				cursorIdx = 0;
 				end2 = 0;
 				while (!end2) {
-					box(15, 21, 5, 1, "%d/%d", idx + 1, (size - 1) / 13 + 1, 0);
+					box(15, 21, 5, 1, 0, "");
+					printf("%d/%d", idx + 1, (size - 1) / 13 + 1);
 					for (i = idx * 13; i < idx * 13 + 13; i++) {
 						gotoxy(2, 6 + i%13);
 						if (cursorIdx == i) color(A, B);
@@ -489,7 +490,8 @@ void signup()
 	int wrong_id = 1;
 	int wrong_password = 1;
 	Infomenu infomenu = ID;
-	Information information;
+	Information information = {
+			NULL, NULL, 0 };
 	
 	do {
 		p_file = fopen("informations.dat", "ab+");
@@ -499,32 +501,32 @@ void signup()
 	while (end == 0) {
 		switch (infomenu) {
 		case ID:
-			box(12, 5, 25, 1, 0, "");
-			box(12, 10, 25, 1, 0, "");
+			box(12, 5, 25, 1, 0, information.id);
+			box(12, 10, 25, 1, 0, information.password);
 			box(0, 5, 9, 1, 1, " 아이디");
 			box(0, 10, 9, 1, 0, "비밀번호");
 			box(0, 15, 9, 1, 0, "계정생성");
 			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case PASSWORD:
-			box(12, 5, 25, 1, 0, "");
-			box(12, 10, 25, 1, 0, "");
+			box(12, 5, 25, 1, 0, information.id);
+			box(12, 10, 25, 1, 0, information.password);
 			box(0, 5, 9, 1, 0, " 아이디");
 			box(0, 10, 9, 1, 1, "비밀번호");
 			box(0, 15, 9, 1, 0, "계정생성");
 			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case MAKE:
-			box(12, 5, 25, 1, 0, "");
-			box(12, 10, 25, 1, 0, "");
+			box(12, 5, 25, 1, 0, information.id);
+			box(12, 10, 25, 1, 0, information.password);
 			box(0, 5, 9, 1, 0, " 아이디");
 			box(0, 10, 9, 1, 0, "비밀번호");
 			box(0, 15, 9, 1, 1, "계정생성");
 			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case BACK:
-			box(12, 5, 25, 1, 0, "");
-			box(12, 10, 25, 1, 0, "");
+			box(12, 5, 25, 1, 0, information.id);
+			box(12, 10, 25, 1, 0, information.password);
 			box(0, 5, 9, 1, 0, " 아이디");
 			box(0, 10, 9, 1, 0, "비밀번호");
 			box(0, 15, 9, 1, 0, "계정생성");
@@ -544,6 +546,7 @@ void signup()
 		case ENTER:
 			switch (infomenu) {
 			case ID:
+				box(12, 5, 25, 1, 0, "");
 				gotoxy(14, 6);
 				CursorView(1);
 				if (!my_gets(information.id, 9)) {
@@ -555,6 +558,7 @@ void signup()
 				CursorView(0);
 				break;
 			case PASSWORD:
+				box(12, 10, 25, 1, 0, "");
 				gotoxy(14, 11);
 				CursorView(1);
 				if (!my_gets(information.password, 9)) {

@@ -18,4 +18,4 @@ void console(int g, int s);			// 콘솔 크기 변경 함수(가로, 세로)
 void color(int a, int b);			// 색 변경 함수 (배경색, 글자색) 
 void CursorView(char show);			// 커서 숨기는 함수 0: 숨기기, 1: 나타내기 
 void box(int g, int s, int gl, int sl, int mode, const char* message);	// x좌표, y좌표, x길이, y길이, 메세지, 모드(1:강조, 0: 기본)
-
+void clearSound1();

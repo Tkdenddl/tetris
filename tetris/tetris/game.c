@@ -66,21 +66,25 @@ int game(Mode mode)
 							score += 100;
 							gotoxy(32, 1);
 							printf("%6d", score);
+							clearSound1();
 							break;
 						case 2:
 							score += 600;
 							gotoxy(32, 1);
 							printf("%6d", score);
+							clearSound1();
 							break;
 						case 3:
 							score += 1500;
 							gotoxy(32, 1);
 							printf("%6d", score);
+							clearSound1();
 							break;
 						case 4:
 							score += 4000;
 							gotoxy(32, 1);
 							printf("%6d", score);
+							clearSound1();
 							break;
 						default:
 							break;

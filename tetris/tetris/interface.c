@@ -1,4 +1,6 @@
 #include "interface.h"
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
 
 void gotoxy(int x, int y)
@@ -56,5 +58,11 @@ void box(int g, int s, int gl, int sl, int mode, const char* message)
 	gotoxy(g + 2, s - sl);
 	printf(message);
 	color(C, B);
+	return;
+}
+
+void clearSound1()
+{
+	PlaySound(TEXT("sound/success_beep.wav"), 0, SND_ASYNC);
 	return;
 }

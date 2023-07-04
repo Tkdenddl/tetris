@@ -34,7 +34,6 @@ int main(void)
 	DWORD prevMode;
 	GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &prevMode);
 	SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), prevMode & ~ENABLE_QUICK_EDIT_MODE);
-
 	while (end == 0) {
 		if (clean) {
 			system("cls");
