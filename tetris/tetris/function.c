@@ -348,43 +348,58 @@ Information login()
 {
 	int end = 0;
 	int key;
+	int key2;		// password 작업
+	int i;		// password 작업에 쓰이는 변수.. 
+	static char hiding_password[LETTER_LIMIT + 1][2*LETTER_LIMIT - 1] = {
+		"",
+		"●",
+		"●●",
+		"●●●",
+		"●●●●",
+		"●●●●●",
+		"●●●●●●",
+		"●●●●●●●",
+		"●●●●●●●●"
+	};
+	int p_length = 0;		// password 길이
 	int success = 0;			// 로그인 성공여부
 	Infomenu infomenu = ID;
 	Information information = {
 		NULL, NULL, 0 };
-	Information data;
+	Information data = {
+		NULL, NULL, 0 };
 	FILE* p_file;
 
 	system("cls");		// 지금 상태에서는 처음에 한번만 지워도 됨. 나중에 문제가 될 수도 있음
 	while (end == 0) {
 		switch (infomenu) {
 		case ID:
-			box(12, 5, 25, 1, 0, "");
-			box(12, 10, 25, 1, 0, "");
+			box(12, 5, 25, 1, 0, data.id);
+			box(12, 10, 25, 1, 0, hiding_password[p_length]);
 			box(0, 5, 9, 1, 1, " 아이디");
 			box(0, 10, 9, 1, 0, "비밀번호");
 			box(0, 15, 9, 1, 0, " 로그인");
 			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case PASSWORD:
-			box(12, 5, 25, 1, 0, "");
-			box(12, 10, 25, 1, 0, "");
+			box(12, 5, 25, 1, 0, data.id);
+			box(12, 10, 25, 1, 0, hiding_password[p_length]);
 			box(0, 5, 9, 1, 0, " 아이디");
 			box(0, 10, 9, 1, 1, "비밀번호");
 			box(0, 15, 9, 1, 0, " 로그인");
 			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case MAKE:
-			box(12, 5, 25, 1, 0, "");
-			box(12, 10, 25, 1, 0, "");
+			box(12, 5, 25, 1, 0, data.id);
+			box(12, 10, 25, 1, 0, hiding_password[p_length]);
 			box(0, 5, 9, 1, 0, " 아이디");
 			box(0, 10, 9, 1, 0, "비밀번호");
 			box(0, 15, 9, 1, 1, " 로그인");
 			box(0, 20, 9, 1, 0, " 나가기");
 			break;
 		case BACK:
-			box(12, 5, 25, 1, 0, "");
-			box(12, 10, 25, 1, 0, "");
+			box(12, 5, 25, 1, 0, data.id);
+			box(12, 10, 25, 1, 0, hiding_password[p_length]);
 			box(0, 5, 9, 1, 0, " 아이디");
 			box(0, 10, 9, 1, 0, "비밀번호");
 			box(0, 15, 9, 1, 0, " 로그인");
@@ -404,15 +419,37 @@ Information login()
 		case ENTER:
 			switch (infomenu) {
 			case ID:
+				box(12, 5, 25, 1, 0, "");		// 아이디 다시 입력받기 위해 써져있던 거 지우기
 				gotoxy(14, 6);
 				CursorView(1);
 				my_gets(data.id, LETTER_LIMIT);
 				CursorView(0);
 				break;
 			case PASSWORD:
+				box(12, 10, 25, 1, 0, "");		// 비밀번호 다시 입력받기 위해 써져있던 거 지우기
 				gotoxy(14, 11);
 				CursorView(1);
-				my_gets(data.password, LETTER_LIMIT);
+				i = 0;
+				while ((key2 = getch()) != ENTER)
+				{
+					if (key2 == BACKSPACE && i > 0)		// backspace
+					{
+						i--;
+						printf("\b\b");
+						printf("  ");
+						printf("\b\b");
+						continue;
+					}
+					else if (i >= LETTER_LIMIT - 1)
+						continue;
+					else if (isprint(key2))		// 프린트 가능한 문자만 받는다.
+					{
+						data.password[i++] = key2;
+						printf("●");
+					}
+				}
+				data.password[i] = '\0';
+				p_length = strlen(data.password);
 				CursorView(0);
 				break;
 			case MAKE:

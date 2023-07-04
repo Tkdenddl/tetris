@@ -9,7 +9,7 @@
 #define A 10		//강조글자색
 
 enum {
-    UP = 72, DOWN = 80, RIGHT = 77, LEFT = 75, ENTER = 13, EXIT = 101
+    UP = 72, DOWN = 80, RIGHT = 77, LEFT = 75, ENTER = 13, EXIT = 101, BACKSPACE = 8
 };
 
 
