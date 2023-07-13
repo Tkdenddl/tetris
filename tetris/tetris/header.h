@@ -59,3 +59,4 @@ void remove_record(const char id[]);									// 기록 삭제함수
 void remove_account(Information* information);
 void add_account(Information* information);
 char search_id(Information* information);		// 아이디 찾기 0: 없음 1: 있음.
+void print_record(Mode mode);

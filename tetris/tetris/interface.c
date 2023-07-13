@@ -63,6 +63,24 @@ void box(int g, int s, int gl, int sl, int mode, const char* message)
 
 void clearSound1()
 {
-	PlaySound(TEXT("sound/success_beep.wav"), 0, SND_ASYNC);
+	PlaySound(TEXT("sound/Clear1.wav"), 0, SND_ASYNC);
+	return;
+}
+
+void clearSound2()
+{
+	PlaySound(TEXT("sound/Clear2.wav"), 0, SND_ASYNC);
+	return;
+}
+
+void clearSound3()
+{
+	PlaySound(TEXT("sound/Clear3.wav"), 0, SND_ASYNC);
+	return;
+}
+
+void clearSound4()
+{
+	PlaySound(TEXT("sound/Clear4.wav"), 0, SND_ASYNC);
 	return;
 }

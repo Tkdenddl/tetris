@@ -71,7 +71,6 @@ void admin_page()
 						gotoxy(2, 6 + i%13);
 						if (cursorIdx == i) color(A, B);
 						if (i >= size) printf("%-15s%-15s", "blank", "blank");
-						else if (strlen(info_list[i].id) > 10 || strlen(info_list[i].password) > 10) printf("%-15s%-15s", "too long", "too long");
 						else printf("%-15s%-15s", info_list[i].id, info_list[i].password);
 						color(C, B);
 					}
@@ -269,63 +268,19 @@ void mypage(Information* information)
 				record.time = time(NULL);
 				strcpy(record.id, information->id);
 
-				rank = add_record(&record, mymode);
-				system("cls");
-				box(0, 0, 21, 1, 0, "");
-				printf("%d등 \t %d점 \t %s", rank, record.score, information->id);
 
-				switch (mymode) {
-				case EASY:
-					fp = fopen("easyrecords.dat", "rb");
-					break;
-				case NORMAL:
-					fp = fopen("normalrecords.dat", "rb");
-					break;
-				case HARD:
-					fp = fopen("hardrecords.dat", "rb");
-					break;
+				rank = add_record(&record, mymode);
+				if (rank) {
+					system("cls");
+					print_record(mymode);
+					box(15, 0, 22, 1, 0, "");
+					printf("%2d등%5d점%10s", rank, record.score, information->id);
+					getch();
 				}
-				box(0, 3, 30, 15, 0, "기록순위");
-				fseek(fp, 0, SEEK_SET);
-				for (i = 0; i < 10; i++)
-				{
-					if (fread(&temp, sizeof(Record), 1, fp) == NULL)
-						break;
-					gotoxy(2, 5 + i);
-					printf("%d등 \t %d점 \t %s", i + 1, temp.score, temp.id);
-				}
-				fclose(fp);
-				getch();
 				break;
 			case RECORD:
 				system("cls");
-				box(0, 0, 37, 23, 0, "기록순위");
-
-				switch (mymode) {
-				case EASY:
-					fp = fopen("easyrecords.dat", "rb+");
-					break;
-				case NORMAL:
-					fp = fopen("normalrecords.dat", "rb+");
-					break;
-				case HARD:
-					fp = fopen("hardrecords.dat", "rb+");
-					break;
-				}
-				
-				fseek(fp, 0, SEEK_SET);
-				for (i = 0; i < 10; i++)
-				{
-					if (fread(&temp, sizeof(Record), 1, fp) == NULL)
-						break;
-					gotoxy(2, 2 + i);
-					printf("%d등", i + 1);
-					gotoxy(6, 2 + i);
-					printf("%d", temp.score);
-					gotoxy(15, 2 + i);
-					printf("%s", temp.id);
-				}
-				fclose(fp);
+				print_record(mymode);
 				getch();
 				break;
 			case MYEXIT:
@@ -549,7 +504,7 @@ void signup()
 				box(12, 5, 25, 1, 0, "");
 				gotoxy(14, 6);
 				CursorView(1);
-				if (!my_gets(information.id, 9)) {
+				if (!my_gets(information.id, LETTER_LIMIT)) {
 					box(12, 15, 25, 1, 0, "between 1 to 9");
 					Sleep(1000);
 					wrong_id = 1;
@@ -561,7 +516,7 @@ void signup()
 				box(12, 10, 25, 1, 0, "");
 				gotoxy(14, 11);
 				CursorView(1);
-				if (!my_gets(information.password, 9)) {
+				if (!my_gets(information.password, LETTER_LIMIT)) {
 					box(12, 15, 25, 1, 0, "between 1 to 9");
 					Sleep(1000);
 					wrong_password = 1;
@@ -809,6 +764,8 @@ int add_record(Record *record, Mode mode)							// 기록 추가함수
 	int result;			// 기록의 인덱스(반환값)
 	char flag = 1;
 
+	if (record->score == 0) return 0;
+
 	switch (mode) {
 	case EASY:
 		fp1 = fopen("easyrecords.dat", "rb");
@@ -979,4 +936,37 @@ char search_id(Information* information)
 	}
 	fclose(fp);
 	return search;
+}
+
+void print_record(Mode mode)
+{
+	Record temp;
+	FILE* fp;
+	int i;
+
+	box(0, 0, 37, 23, 0, "기록순위");
+	gotoxy(2, 3);
+	printf("%s%10s%5s%-10s", "Rank", "Score", " ", "Player");
+
+	switch (mode) {
+	case EASY:
+		fp = fopen("easyrecords.dat", "rb+");
+		break;
+	case NORMAL:
+		fp = fopen("normalrecords.dat", "rb+");
+		break;
+	case HARD:
+		fp = fopen("hardrecords.dat", "rb+");
+		break;
+	}
+
+	fseek(fp, 0, SEEK_SET);
+	for (i = 0; i < 20; i++)
+	{
+		if (fread(&temp, sizeof(Record), 1, fp) == NULL)
+			break;
+		gotoxy(2, 4 + i);
+		printf("%2d등%10d%5s%-10s", i + 1, temp.score, " ", temp.id);
+	}
+	fclose(fp);
 }

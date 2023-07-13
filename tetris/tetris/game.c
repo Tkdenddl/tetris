@@ -63,28 +63,28 @@ int game(Mode mode)
 						switch (check_grid(grid))
 						{
 						case 1:
+							clearSound1();
 							score += 100;
 							gotoxy(32, 1);
 							printf("%6d", score);
-							clearSound1();
 							break;
 						case 2:
+							clearSound2();
 							score += 600;
 							gotoxy(32, 1);
 							printf("%6d", score);
-							clearSound1();
 							break;
 						case 3:
+							clearSound3();
 							score += 1500;
 							gotoxy(32, 1);
 							printf("%6d", score);
-							clearSound1();
 							break;
 						case 4:
+							clearSound4();
 							score += 4000;
 							gotoxy(32, 1);
 							printf("%6d", score);
-							clearSound1();
 							break;
 						default:
 							break;
