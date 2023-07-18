@@ -2,13 +2,11 @@
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
 
-
 void gotoxy(int x, int y)
 {
-	COORD Cur;
-	Cur.X = x;
-	Cur.Y = y;
+	COORD Cur = { x, y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
+	return;
 }
 void console(int g, int s)
 {
@@ -25,12 +23,9 @@ void color(int a, int b)
 }
 void CursorView(char show)
 {
-	HANDLE hConsole;
-	CONSOLE_CURSOR_INFO ConsoleCursor;
-	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	ConsoleCursor.bVisible = show;
-	ConsoleCursor.dwSize = 1;
-	SetConsoleCursorInfo(hConsole, &ConsoleCursor);
+	CONSOLE_CURSOR_INFO ConsoleCursor = { 1, show };
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &ConsoleCursor);
+	return;
 }
 
 void box(int g, int s, int gl, int sl, int mode, const char* message)
@@ -44,10 +39,10 @@ void box(int g, int s, int gl, int sl, int mode, const char* message)
 	printf("¦¤ ");
 	for (y = 1; y <= sl; y++)
 	{
-		gotoxy(g, ++s);
-		printf("¦¢");
+		gotoxy(g, ++s);	printf("¦¢");
 		for (x = 1; x <= gl; x++)
 			printf(" ");
+	
 			printf("¦¢ ");
 	}
 	gotoxy(g, ++s);

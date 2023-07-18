@@ -20,11 +20,10 @@ void admin_page()
 	int size;
 	int idx = 0;
 	int cursorIdx = 0;
-	int i = 0;
+	int i;
 	Adminmenu adminmenu = REMOVE;
 	FILE* fp1;
 	Information* info_list;
-	box(0, 0, 20, 1, 0, "ID : admin");
 	while (!end) {
 		system("cls");
 		switch (adminmenu) {
@@ -48,15 +47,16 @@ void admin_page()
 		case ENTER:
 			switch (adminmenu) {
 			case REMOVE:
-				while(!(fp1 = fopen("informations.dat", "rb+")));
+				if (!(fp1 = fopen("informations.dat", "rb+"))) {
+					fprintf(stderr, "informations.dat 파일을 열지 못했습니다.");
+					return;
+				}
 				fseek(fp1, 0, SEEK_END);
 				size = ftell(fp1)/sizeof(Information);
 				info_list = (Information*)malloc(size*sizeof(Information));
 				fseek(fp1, 0, SEEK_SET);
-				i = 0;
-				while (1) {
-					fread(&info_list[i++], sizeof(Information), 1, fp1);
-					if (feof(fp1)) break;
+				for (i = 0; i < size; i++) {
+					fread(&info_list[i], sizeof(Information), 1, fp1);
 				}
 				fclose(fp1);
 				box(0, 4, 36, 15, 0, "");
@@ -140,7 +140,6 @@ void mypage(Information* information)
 	Record record;
 	int rank;		// 기록순위
 	Record temp;
-	FILE* fp;
 	int clean = 1;		// 다른 메뉴에서 넘어갈 때만 화면 지우도록
 
 	while (end == 0) {
@@ -228,13 +227,12 @@ void mypage(Information* information)
 				box(12, 4, 25, 1, 0, "current: ");
 				my_gets(tpassword, LETTER_LIMIT);
 				if (strcmp(tpassword, information->password) == 0) {
-					remove_account(information);
 					box(12, 4, 25, 1, 0, "alter : ");
 					my_gets(information->password, LETTER_LIMIT);
-					add_account(information);
+					replace_account(information);
 				}
 				else {
-					box(12, 4, 25, 1, 0, "wrong!");
+					box(12, 4, 25, 1, 0, "wrong!\a");
 					Sleep(1000);
 				}
 				CursorView(0);
@@ -285,14 +283,11 @@ void mypage(Information* information)
 				break;
 			case MYEXIT:
 				information->onoff = 0;					// 로그아웃
-				remove_account(information);
-				add_account(information);
+				replace_account(information);
 				end = 1;
 				break;
 			}
 			break;
-		case RECORD:
-
 		default:
 			break;
 		}
@@ -306,7 +301,7 @@ Information login()
 	int key;
 	int key2;		// password 작업
 	int i;		// password 작업에 쓰이는 변수.. 
-	static char hiding_password[LETTER_LIMIT + 1][2*LETTER_LIMIT - 1] = {
+	static char hiding_password[LETTER_LIMIT + 1][2*LETTER_LIMIT + 1] = {
 		"",
 		"●",
 		"●●",
@@ -315,7 +310,8 @@ Information login()
 		"●●●●●",
 		"●●●●●●",
 		"●●●●●●●",
-		"●●●●●●●●"
+		"●●●●●●●●",
+		"●●●●●●●●●"
 	};
 	int p_length = 0;		// password 길이
 	int success = 0;			// 로그인 성공여부
@@ -529,7 +525,7 @@ void signup()
 					box(12, 15, 25, 1, 0, "wrong type!");
 					Sleep(1000);
 				}
-				else if (search_id(&information) == 1) {
+				else if (search_id(&information)) {
 					box(12, 15, 25, 1, 0, "existing id!");
 					Sleep(1000);
 				}
@@ -920,17 +916,34 @@ void add_account(Information* information)
 	return;
 }
 
+void replace_account(Information* information)
+{
+	FILE* fp;
+	Information buffer;
+	char idx = search_id(information);
+	if (!(fp = fopen("informations.dat", "rb+"))) {
+		fprintf(stderr, "informations.dat 파일을 열 수 없습니다.");
+		return;
+	}
+	fseek(fp, (idx - 1) * sizeof(Information), SEEK_SET);
+	fwrite(information, sizeof(Information), 1, fp);
+	fclose(fp);
+	return;
+}
+
 char search_id(Information* information)
 {
 	FILE* fp = fopen("informations.dat", "rb");
 	Information buffer;
 	char search = 0;
+	char count = 0;
 
 	fseek(fp, 0, SEEK_SET);
 	while (!feof(fp)) {
 		fread(&buffer, sizeof(Information), 1, fp);
+		count++;
 		if (strcmp(information->id, buffer.id) == 0) {
-			search = 1;
+			search = count;
 			break;
 		}
 	}

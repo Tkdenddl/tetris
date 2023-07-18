@@ -11,13 +11,13 @@
 #define LETTER_LIMIT 9		// 입력받는 아이디, 비번 최대 글자수
 
 typedef struct {
-	char id[20];
-	char password[20];
+	char id[LETTER_LIMIT + 1];
+	char password[LETTER_LIMIT + 1];
 	char onoff;		// 1: on  0: off
 } Information;
 
 typedef struct {
-	char id[20];
+	char id[LETTER_LIMIT + 1];
 	int time;		// 기록연월일 표시
 	int score;
 } Record;
@@ -58,5 +58,6 @@ int add_record(Record *record, Mode mode);							// 기록 추가함수
 void remove_record(const char id[]);									// 기록 삭제함수
 void remove_account(Information* information);
 void add_account(Information* information);
+void replace_account(Information* information);		// 같은 아이디의 계정정보 수정
 char search_id(Information* information);		// 아이디 찾기 0: 없음 1: 있음.
 void print_record(Mode mode);
